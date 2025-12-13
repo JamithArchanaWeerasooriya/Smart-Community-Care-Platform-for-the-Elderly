@@ -1,0 +1,1 @@
+# Smart-Community-Care-Platform-for-the-Elderly
