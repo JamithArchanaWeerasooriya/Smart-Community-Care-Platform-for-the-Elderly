@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Command History</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #startButton {
+            background-color: #28a745;
+            color: white;
+        }
+        #startButton:disabled {
+            background-color: #9cd8a7;
+            cursor: not-allowed;
+        }
+
+        #stopButton {
+            background-color: #dc3545;
+            color: white;
+        }
+        #stopButton:disabled {
+            background-color: #eba0a7;
+            cursor: not-allowed;
+        }
+
+        #status {
+            font-size: 16px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Blinking red dot for "listening" */
+        #status.listening::before {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: #dc3545;
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+
+        #results-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        #results-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* This is the UI for each result item */
+        .result-item {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-item .transcript {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: #000;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .result-item .intent {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #0056b3; /* Blue for intent */
+            margin-bottom: 10px;
+        }
+
+        .result-item .entities-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        
+        .result-item .entity-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .result-item .entity-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-item .entity-key {
+            font-weight: 600;
+            color: #333;
+            text-transform: capitalize;
+        }
+
+        .result-item .entity-value {
+            font-family: 'Noto Sans Sinhala', sans-serif; /* Good for Sinhala */
+            color: #d9534f; /* Reddish for value */
+            font-weight: 500;
+            background-color: #fdf2f2;
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="controls">
+        <button onclick="startVoiceCommand()" id="startButton">Start Listening</button>
+        <button onclick="stopVoiceCommand()" id="stopButton" disabled>Stop</button>
+        <div id="status">Click "Start" to begin.</div>
+    </div>
+
+    <div id="results-container">
+        <h2>History</h2>
+        <ul id="results-list">
+            </ul>
+    </div>
+
+    <script>
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        
+        // --- Recognition Settings ---
+        recognition.lang = 'si-LK';
+        recognition.interimResults = false;
+        recognition.continuous = true; // Keep listening even after silence
+
+        // --- State and UI Elements ---
+        let isListening = false;
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const statusDiv = document.getElementById('status');
+        const resultsList = document.getElementById('results-list');
+
+        // --- Recognition Event Handlers ---
+
+        recognition.onstart = () => {
+            isListening = true;
+            statusDiv.textContent = 'Listening...';
+            statusDiv.classList.add('listening');
+            startButton.disabled = true;
+            stopButton.disabled = false;
+        };
+
+        recognition.onresult = async (event) => {
+            const transcript = event.results[event.results.length - 1][0].transcript.trim();
+            console.log('🎤 You said:', transcript);
+            statusDiv.textContent = 'Processing: "' + transcript + '"';
+            statusDiv.classList.remove('listening');
+
+            // Send recognized text to backend
+            try {
+                const response = await fetch('http://localhost:5000/parse', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: transcript })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('💬 Backend response:', data);
+
+                // --- NEW: Call function to update UI ---
+                displayResult(transcript, data);
+
+            } catch (error) {
+                console.error('🚨 Error sending to backend:', error);
+                statusDiv.textContent = 'Error processing command.';
+                // Optionally display this error on the page
+                displayError(transcript, error.message);
+            }
+        };
+
+        recognition.onerror = (event) => {
+            console.error('🎙️ Speech recognition error:', event.error);
+            if (event.error === 'no-speech' || event.error === 'audio-capture') {
+                // Don't stop, just log it. 'onend' will handle restart.
+            } else {
+                statusDiv.textContent = `Error: ${event.error}`;
+            }
+        };
+
+        recognition.onend = () => {
+            console.log('🎙️ Speech recognition ended.');
+            statusDiv.classList.remove('listening');
+            
+            if (isListening) {
+                // If we are supposed to be listening, restart it
+                console.log('Restarting recognition...');
+                recognition.start();
+            } else {
+                // We manually stopped
+                statusDiv.textContent = 'Stopped. Click "Start" to begin.';
+                startButton.disabled = false;
+                stopButton.disabled = true;
+            }
+        };
+
+        // --- Control Functions ---
+
+        function startVoiceCommand() {
+            if (isListening) return;
+            console.log("🟢 Starting recognition...");
+            recognition.start();
+        }
+
+        function stopVoiceCommand() {
+            if (!isListening) return;
+            console.log("🔴 Stopping recognition...");
+            isListening = false; // This flag will prevent 'onend' from restarting
+            recognition.stop();
+        }
+
+        // --- NEW: UI Update Functions ---
+
+        /**
+         * Creates a new result card and adds it to the top of the history list.
+         * @param {string} transcript - The original text spoken by the user.
+         * @param {object} data - The JSON response from the backend {intent, entities}.
+         */
+        function displayResult(transcript, data) {
+            const item = document.createElement('li');
+            item.className = 'result-item';
+
+            // 1. Create the transcript text
+            const transcriptEl = document.createElement('div');
+            transcriptEl.className = 'transcript';
+            transcriptEl.textContent = `"${transcript}"`;
+
+            // 2. Create the Intent
+            const intentEl = document.createElement('div');
+            intentEl.className = 'intent';
+            intentEl.textContent = data.intent || 'No Intent Found';
+
+            // 3. Create the list of Entities
+            const entitiesListEl = document.createElement('ul');
+            entitiesListEl.className = 'entities-list';
+
+            if (data.entities && data.entities.length > 0) {
+                data.entities.forEach(entity => {
+                    const entityItem = document.createElement('li');
+                    entityItem.className = 'entity-item';
+
+                    const entityKey = document.createElement('span');
+                    entityKey.className = 'entity-key';
+                    entityKey.textContent = entity.entity;
+
+                    const entityValue = document.createElement('span');
+                    entityValue.className = 'entity-value';
+                    entityValue.textContent = entity.value;
+
+                    entityItem.appendChild(entityKey);
+                    entityItem.appendChild(entityValue);
+                    entitiesListEl.appendChild(entityItem);
+                });
+            } else {
+                const noEntities = document.createElement('li');
+                noEntities.className = 'entity-item';
+                noEntities.textContent = 'No entities detected.';
+                entitiesListEl.appendChild(noEntities);
+            }
+
+            // 4. Assemble the card
+            item.appendChild(transcriptEl);
+            item.appendChild(intentEl);
+            item.appendChild(entitiesListEl);
+
+            // 5. Add to top of the list
+            resultsList.prepend(item);
+        }
+
+        /**
+         * Displays an error card in the history.
+         */
+        function displayError(transcript, errorMessage) {
+            const item = document.createElement('li');
+            item.className = 'result-item';
+            item.style.borderColor = '#dc3545'; // Highlight error
+            
+            const transcriptEl = document.createElement('div');
+            transcriptEl.className = 'transcript';
+            transcriptEl.textContent = `🗣️ "${transcript}"`;
+            
+            const errorEl = document.createElement('div');
+            errorEl.className = 'intent';
+            errorEl.style.color = '#dc3545';
+            errorEl.textContent = `Error: ${errorMessage}`;
+            
+            item.appendChild(transcriptEl);
+            item.appendChild(errorEl);
+            resultsList.prepend(item);
+        }
+
+    </script>
+
+</body>
+</html>
