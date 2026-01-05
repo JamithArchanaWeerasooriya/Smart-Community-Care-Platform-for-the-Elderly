@@ -7,7 +7,6 @@ app = Flask(__name__)
 CORS(app)
 agent = None  # global agent
 
-
 # Load Rasa model asynchronously
 async def load_model():
     global agent
