@@ -1,11 +1,18 @@
 @echo off
 
 echo Installing(Frontend)...
-start cmd /c "cd frontend && npm install"
+cd frontend
+call npm install
 
 echo Installing(Backend)...
-start cmd /c "cd backend && npm i -g nodemon && npm install"
+cd ..
+cd backend
+call npm i -g nodemon
+call npm install
+cd ..
 
 echo ===============================
 echo Installed successfully
 echo ===============================
+
+pause
