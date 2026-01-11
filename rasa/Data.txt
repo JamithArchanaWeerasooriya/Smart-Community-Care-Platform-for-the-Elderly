@@ -1,0 +1,97 @@
+Understanding the Domain
+
+Setting reminders
+Triggering emergency alerts
+Finding helpers
+Checking status
+Cancelling actions
+General greetings and confirmations
+
+1. Intents
+
+set_reminder - Add a new reminder for a specific task/time/date
+update_reminder - Change or reschedule a reminder
+delete_reminder - Delete a scheduled reminder
+check_reminder - Check upcoming reminders
+set_emergency_alert - Trigger emergency or ask for help
+cancel_command - Cancel current process or action
+find_helper - Find community helper or caregiver
+check_status - Ask system about schedule, health, or day status
+deny - Decline / disagree
+thanks - Express gratitude
+
+2. Entity
+
+time - Time of event
+date - Date/day
+task - Task or activity
+person - Helper or contact
+location - Place if mentioned
+context - Emergency or emotional state
+
+Example Rasa NLU Dataset (nlu.yml)
+version: "3.1"
+nlu:
+- intent: set_reminder
+  examples: |
+    - මට [හවස 5ට](time) [බෙහෙත් බොන්න](task) මතක් කරන්න
+    - [අද](date) [වතුර බොන්න](task) මතක් කරන්න
+    - [හෙට](date) [රෑ 9ට](time) [බෙහෙත් බොන්න](task) මතක් කරන්න
+
+- intent: set_emergency_alert
+  examples: |
+    - උදව් කරන්න. මට [අසනීපයි](context)
+    - මට හදිස්සි උදව්වක් අවශ්‍යයි
+
+- intent: cancel_command
+  examples: |
+    - එපා
+    - Cancel කරන්න
+    - Cancel කරන්ඩ
+    - අවලංගු කරන්න
+
+- intent: find_helper
+  examples: |
+    - මට [හෙට](date) [උදේ 8ට](time) [Doctor කෙනෙක් හම්බ වෙන්න යන්න](task) උදවුවට කවුරු හරි ඕනෑ
+    - මට උදව් කරන්න කෙනෙක් ඕනේ
+
+- intent: check_status
+  examples: |
+    - [අද](date) මට කරන තියන දේවල් මොනවද?
+    - මට මතක් කරන තියන දේවල් මොනවද?
+    - [අද](date) මගේ reminders මොනවද?
+
+- intent: greeting
+  examples: |
+    - ආයුබෝවන්
+    - හෙලෝ
+    - සුභ උදෑසනක්
+    - Hi
+
+- intent: goodbye
+  examples: |
+    - බායි
+    - ගිහින් එන්නම්
+    - පස්සේ හමුවෙමු
+
+- intent: affirm
+  examples: |
+    - හරි
+    - ඔව්
+    - හා
+
+- intent: deny
+  examples: |
+    - නැහැ
+    - එපා
+    - නෑ
+
+- intent: thanks
+  examples: |
+    - ස්තූතියි
+    - බොහොම ස්තුතියි
+    - ඔබට ස්තූතියි
+    - Thank You
+
+
+* I want to sample data for train my rasa NLU using sinhala language. Give accurate sinhala speacking style. Give me 500 data record per intent.

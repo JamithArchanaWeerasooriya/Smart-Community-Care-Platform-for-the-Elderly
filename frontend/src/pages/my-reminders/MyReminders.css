@@ -1,0 +1,357 @@
+/* Elderly Friendly Design (Scoped; no :root variables) */
+
+.my-reminders-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+    font-family: 'Inter', 'Roboto', 'Noto Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2B2B2B;
+    min-height: 100vh;
+    font-size: 18px; /* Base accessibility */
+}
+.my-reminders-page.text-large { font-size: 18px; }
+.my-reminders-page.text-xlarge { font-size: 20px; }
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #DDE3EA;
+    padding-bottom: 20px;
+}
+
+.page-title {
+    font-size: 28px;
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #1F4F7A;
+}
+
+.page-title-wrap { display: flex; flex-direction: column; gap: 6px; }
+.page-subtitle { color: #1F4F7A; font-weight: 600; }
+
+.header-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.text-size-group { display: flex; gap: 8px; }
+.size-button {
+    background-color: #e5e7eb;
+    color: #111827;
+    border: 2px solid #000;
+    padding: 10px 14px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    border-radius: 12px;
+    cursor: pointer;
+}
+.size-button.selected {
+    background-color: #d1d5db;
+}
+.size-button:focus { outline: 3px solid #1F4F7A; }
+
+.refresh-button {
+    background-color: #2F70AF;
+    color: #ffffff;
+    border: 1px solid #2F70AF;
+    padding: 14px 24px;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+.refresh-button:hover {
+    background-color: #1d4ed8;
+    transform: scale(1.02);
+}
+
+.refresh-button:active {
+    transform: scale(0.98);
+}
+
+.refresh-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+.refresh-button:focus { outline: 3px solid #1F4F7A; }
+
+/* Toolbar: tabs + chips */
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.tabs { display: flex; gap: 8px; }
+.tab {
+    background: #ffffff;
+    border: 1px solid #DDE3EA;
+    color: #1F4F7A;
+    padding: 12px 18px;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.tab.active {
+    background: #1F4F7A;
+    color: #ffffff;
+}
+.tab:focus { outline: 3px solid #1F4F7A; }
+
+.filters { display: flex; gap: 8px; }
+.chip {
+    background: #EAF2FB;
+    color: #1F4F7A;
+    border: 1px solid #2F70AF;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.chip.selected {
+    background: #2F70AF;
+    color: #ffffff;
+    border-color: #2F70AF;
+}
+.chip:focus { outline: 3px solid #1F4F7A; }
+
+.message-box {
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border: 2px solid transparent;
+}
+
+.message-box.error {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border-color: #f87171;
+}
+
+.message-box.empty {
+    background-color: #e5e7eb;
+    color: #374151;
+    text-align: center;
+    padding: 40px;
+}
+
+.reminders-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+/* Cards */
+.card {
+    background-color: #FFFFFF;
+    border: 1px solid #DDE3EA;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(31, 79, 122, 0.08);
+    animation: fadeIn 250ms ease;
+}
+.card__title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #1F4F7A;
+    margin: 0 0 16px 0;
+}
+.card--form { }
+.card--list { }
+
+/* Two Column Layout */
+.main-container { margin-top: 16px; }
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1.8fr;
+    gap: 24px;
+}
+
+/* Form */
+.form { display: flex; flex-direction: column; gap: 12px; }
+.form__label { font-size: 16px; font-weight: 700; color: var(--color-primary-dark); }
+.form__input,
+.form__select,
+.form__textarea {
+    height: 48px;
+    font-size: 18px;
+    padding: 10px 12px;
+    border: 1px solid #DDE3EA;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #2B2B2B;
+}
+.form__textarea { height: auto; }
+.form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form__col { display: flex; flex-direction: column; gap: 8px; }
+.form__actions { display: flex; gap: 12px; margin-top: 8px; }
+
+/* Buttons */
+.btn { min-height: 52px; padding: 0 16px; font-size: 20px; font-weight: 700; border-radius: 8px; cursor: pointer; }
+.btn--primary { background: #2F70AF; color: #fff; border: 1px solid #2F70AF; }
+.btn--secondary { background: transparent; color: #2F70AF; border: 1px solid #2F70AF; }
+.btn--danger { background: #C62828; color: #fff; border: 1px solid #C62828; }
+.btn:focus { outline: 3px solid #1F4F7A; }
+.btn:hover { filter: brightness(0.95); }
+
+/* Reminder Item (BEM) */
+.reminder-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid #DDE3EA;
+    border-radius: 12px;
+    background: #FFFFFF;
+}
+.reminder-item--completed { opacity: 0.9; }
+.reminder-item__left { display: flex; flex-direction: column; gap: 6px; }
+.reminder-item__right { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; justify-content: space-between; }
+.reminder-item__time { font-size: 18px; font-weight: 700; color: #1F4F7A; }
+.reminder-item__title { font-size: 22px; font-weight: 800; margin: 0; }
+.reminder-item__desc { font-size: 18px; color: #3a3a3a; margin: 0; }
+.reminder-item__meta { font-size: 18px; color: #555; display: flex; gap: 8px; align-items: center; }
+.meta-label { font-weight: 700; color: #1F4F7A; }
+.meta-spacer { color: #999; }
+.item-actions { display: flex; gap: 8px; }
+
+/* Status badges */
+.status-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    border: 1px solid transparent;
+}
+.status-due { background-color: #ffe4e4; color: #8b1c1c; border-color: var(--color-error); }
+.status-completed { background-color: #e4f2e8; color: #135e2a; border-color: var(--color-success); }
+.status-due { background-color: #ffe4e4; color: #8b1c1c; border-color: #C62828; }
+.status-completed { background-color: #e4f2e8; color: #135e2a; border-color: #1E8E3E; }
+.status-upcoming { background-color: #EAF2FB; color: #1F4F7A; border-color: #2F70AF; }
+
+.card-main {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.reminder-time {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.reminder-title {
+    font-size: 1.9rem;
+    margin: 0;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.reminder-desc {
+    font-size: 1.3rem;
+    margin: 0;
+    color: #374151;
+    line-height: 1.5;
+}
+
+.reminder-meta {
+    font-size: 1.1rem;
+    color: #6b7280;
+    margin-top: 8px;
+    font-style: italic;
+}
+
+.meta-label {
+    font-weight: 600;
+    font-style: normal;
+}
+
+.card-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 2px solid transparent;
+}
+
+.status-due {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border-color: #ef4444;
+}
+
+.status-completed {
+    background-color: #d1fae5;
+    color: #065f46;
+    border-color: #10b981;
+}
+
+.status-upcoming {
+    background-color: #e0e7ff;
+    color: #3730a3;
+    border-color: #6366f1;
+}
+
+.reminder-section { margin-bottom: 28px; }
+.section-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #1F4F7A;
+    margin: 0 0 12px 0;
+}
+
+/* Skeleton loading */
+.skeleton-list { display: flex; flex-direction: column; gap: 20px; }
+.skeleton-card {
+    height: 120px;
+    border-radius: 16px;
+    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 37%, #e5e7eb 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease infinite;
+    border: 3px solid var(--color-border);
+}
+@keyframes shimmer {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+    .page-header { flex-direction: column; gap: 16px; align-items: flex-start; }
+    
+    .refresh-button { width: 100%; text-align: center; }
+    .header-controls { width: 100%; justify-content: space-between; }
+    .two-col { grid-template-columns: 1fr; }
+    .reminder-item__title { font-size: 20px; }
+}
