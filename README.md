@@ -402,8 +402,6 @@ These commands are optional during normal project usage (the batch files already
 
 ---
 
-This README documents the Rasa-based Sinhala assistant and backend that power your part of the **Smart Community Care Platform for the Elderly**, including installation, training, running, and how it integrates with voice input and the rest of the system.
-
 
 
 
