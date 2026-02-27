@@ -10,11 +10,8 @@ const ReminderSchema = new mongoose.Schema(
 		completed: { type: Boolean, default: false },
 		notified: { type: Boolean, default: false },
 		lastNotifiedAt: { type: Date },
-		repeat: {
-			type: String,
-			enum: ["none", "daily", "weekly", "monthly"],
-			default: "none",
-		},
+		next_trigger_at: { type: Date },
+		repeat_time_period: {type: Number, default: 0},
 	},
 	{ timestamps: true }
 );

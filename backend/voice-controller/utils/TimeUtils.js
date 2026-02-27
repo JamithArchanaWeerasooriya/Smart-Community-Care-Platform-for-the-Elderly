@@ -1,11 +1,16 @@
 
-function exportTime(date, time, timePeriod) {
+function exportTime(time, timePeriod) {
 
     if (!time) {
-        return null;
+        //if time null return current time same format
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
     }
 
     var timeSplit = time.split(" ");
+    console.log(timeSplit);
     var hour = 0;
     var min = 0;
 
@@ -76,8 +81,13 @@ function exportTime(date, time, timePeriod) {
 
         var item2 = timeSplit[1];
         if (timeSplit.length == 3) {
-            item2 = item2 + timeSplit[2];
+            if (timeSplit[1].startsWith("විනාඩි") || timeSplit[1].startsWith("මිනිත්තු")) {
+                item2 = timeSplit[2];
+            } else {
+                item2 = item2 + timeSplit[2];
+            }
         }
+
         if (item2.startsWith("දහය")) {
             min = 10;
         } else if (item2.startsWith("එකොලහ") || item2.startsWith("එකොළහ")) {
@@ -229,51 +239,6 @@ function exportTime(date, time, timePeriod) {
                 hour = 24;
             }
         }
-    } else {
-        const currentTimeInMillis = Date.now();
-        const startOfToday = new Date();
-
-        // set date if provided
-        if(date){
-            const [year, month, day] = date.split("-").map(Number);
-            startOfToday.setFullYear(year, month - 1, day);
-        }
-
-        startOfToday.setHours(0, 0, 0, 0);
-
-        // add hours & minutes
-        const resultMillis =
-            startOfToday.getTime() +
-            (hour * 60 * 60 * 1000) +
-            (min * 60 * 1000);
-
-        if (currentTimeInMillis > resultMillis) {
-            if (hour == 1) {
-                hour = 13;
-            } else if (hour == 2) {
-                hour = 14;
-            } else if (hour == 3) {
-                hour = 15;
-            } else if (hour == 4) {
-                hour = 16;
-            } else if (hour == 5) {
-                hour = 17;
-            } else if (hour == 6) {
-                hour = 18;
-            } else if (hour == 7) {
-                hour = 19;
-            } else if (hour == 8) {
-                hour = 20;
-            } else if (hour == 9) {
-                hour = 21;
-            } else if (hour == 10) {
-                hour = 22;
-            } else if (hour == 11) {
-                hour = 23;
-            } else if (hour == 12) {
-                hour = 24;
-            }
-        }
     }
 
     if (hour == 0 && min == 0) {
@@ -286,10 +251,99 @@ function exportTime(date, time, timePeriod) {
         return `${hh}:${mm}`;
     };
     const formatted = to24hTimeString(hour, min);
-    
+    console.log("Exported time:", formatted);
     return formatted;
 }
 
+function jumpNextTime(time) {
+    //convert am time to pm time
+    //time is always in HH:mm format
+    //I want to jump to next possible time (if 16:30 then 04:30)
+    var timeSplit = time.split(":");
+    var hour = parseInt(timeSplit[0]);
+    var min = parseInt(timeSplit[1]);
+    hour = (hour + 12) % 24;
+
+    const to24hTimeString = (h24, m) => {
+        const hh = String(h24 === 24 ? 0 : h24).padStart(2, '0');
+        const mm = String(m).padStart(2, '0');
+        return `${hh}:${mm}`;
+    };
+    return to24hTimeString(hour, min);
+}
+
+function parseSinhalaNumberWord(word) {
+    if (!word) {
+        return null;
+    }
+
+    const normalized = word
+        .toString()
+        .trim()
+        .replace(/\s+/g, "")
+        .replace(/[^\u0D80-\u0DFF]/g, "");
+
+    const map = [
+        { value: 30, words: ["තිහ"] },
+        { value: 29, words: ["විසිනවය", "විසිනමය"] },
+        { value: 28, words: ["විසිඅට"] },
+        { value: 27, words: ["විසිහත"] },
+        { value: 26, words: ["විසිහය"] },
+        { value: 25, words: ["විසිපහ"] },
+        { value: 24, words: ["විසිහතර"] },
+        { value: 23, words: ["විසිතුන"] },
+        { value: 22, words: ["විසිදෙක"] },
+        { value: 21, words: ["විසිඑක"] },
+        { value: 20, words: ["විස්ස"] },
+        { value: 19, words: ["දහනවය", "දහනමය"] },
+        { value: 18, words: ["දහඅට"] },
+        { value: 17, words: ["දාහත"] },
+        { value: 16, words: ["දාසය"] },
+        { value: 15, words: ["පහලව", "පහලොව", "පහළව", "පහළොව"] },
+        { value: 14, words: ["දාහතර"] },
+        { value: 13, words: ["දහතුන"] },
+        { value: 12, words: ["දොලහ", "දොළහ"] },
+        { value: 11, words: ["එකොලහ", "එකොළහ"] },
+        { value: 10, words: ["දහය"] },
+        { value: 9, words: ["නවය", "නමය"] },
+        { value: 8, words: ["අට"] },
+        { value: 7, words: ["හත"] },
+        { value: 6, words: ["හය"] },
+        { value: 5, words: ["පහ"] },
+        { value: 4, words: ["හතර"] },
+        { value: 3, words: ["තුන"] },
+        { value: 2, words: ["දෙක"] },
+        { value: 1, words: ["එක"] }
+    ];
+
+    for (const item of map) {
+        if (item.words.some((w) => normalized === w || normalized.startsWith(w))) {
+            return item.value;
+        }
+    }
+
+    return null;
+}
+
+function exportIntervalTime(interval) {
+    if (!interval || typeof interval !== "string") {
+        return null;
+    }
+
+    const normalized = interval.trim().replace(/\s+/g, "");
+    const fromPart = normalized.includes("ෙන්") ? normalized.split("ෙන්")[0] : normalized;
+
+    const parsedFromPart = parseSinhalaNumberWord(fromPart);
+    if (parsedFromPart !== null) {
+        return parsedFromPart;
+    }
+
+    const firstToken = interval.trim().split(/\s+/)[0];
+    return parseSinhalaNumberWord(firstToken);
+}
+
 module.exports = {
-    exportTime
+    exportTime,
+    jumpNextTime,
+    exportIntervalTime
 };

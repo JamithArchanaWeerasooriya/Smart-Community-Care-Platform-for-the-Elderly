@@ -2,21 +2,20 @@ version: "3.1"
 nlu:
 - synonym: home
   examples: |
-    - මුල් පිටුවට
+    - මුල්
     - මුලට
     - හෝම්
     - home
+    - හෝම්
     - හෝම්පේජ්
     - හෝම් පේජ්
 - synonym: my-reminders
   examples: |
-    - මතක් කරන්ඩ තියෙන්නෙ
-    - මතක් කරන්න තියෙන දේවල්
-    - මතක් කිරීම්
-    - මතක් කරන්න තියෙන්නෙ
+    - මතක්
     - රිමයින්ටර්ස්
+    - රිමයින්ටස්
     - රිමයින්ඩර්ස්
-    - මතක් කරන්න
+    - reminders
 
 - synonym: all
   examples: |
@@ -25,3 +24,18 @@ nlu:
     - සියලුම
     - සියළු
     - සෑම
+    - හැමදාම
+    - හැමදම
+
+- synonym: hour
+  examples: |
+    - පැය
+
+- synonym: minute
+  examples: |
+    - විනාඩි
+
+
+- synonym: repeat
+  examples: |
+    - න්
