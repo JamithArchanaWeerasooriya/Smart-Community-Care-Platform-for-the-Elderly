@@ -4,6 +4,18 @@ var cors = require('cors');
 var mongoose = require("mongoose");
 var routes = require("./routes");
 
+//test time utils
+// const { exportTime, jumpNextTime } = require("./voice-controller/utils/TimeUtils");
+// console.log(exportTime("දොලහට",null));
+//test date utils
+// const { exportDate, jumpNextDate } = require("./voice-controller/utils/DateUtils");
+
+// console.log(exportDate("සදුදා",null));
+
+//test
+
+
+
 var app = express();
 dotenv.config();
 app.use(express.urlencoded({extended:true}));
