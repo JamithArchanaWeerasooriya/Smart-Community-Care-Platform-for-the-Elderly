@@ -1,14 +1,16 @@
 import './MyReminders.css';
 import { useEffect, useMemo, useState } from 'react';
 import 'material-icons/iconfont/material-icons.css';
+import { useSearchParams } from 'react-router-dom';
 const BACKEND_API_ENDPOINT = import.meta.env.VITE_BACKEND_API_ENDPOINT;
+const TAB_KEYS = ['today', 'upcoming', 'past', 'all'];
 
 function MyReminders() {
     // State
     const [reminders, setReminders] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [activeTab, setActiveTab] = useState('today'); // today | upcoming | past | all
+    const [searchParams, setSearchParams] = useSearchParams();
     const [statusFilter] = useState('all'); // all | due | upcoming | completed
     const [now, setNow] = useState(() => new Date());
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,35 +33,28 @@ function MyReminders() {
     const WEEK_MS = 7 * DAY_MS;
     const MONTH_MS = 30 * DAY_MS;
 
+    const activeTab = useMemo(() => {
+        const tabFromUrl = searchParams.get('tab');
+        return TAB_KEYS.includes(tabFromUrl) ? tabFromUrl : 'today';
+    }, [searchParams]);
+
+    const setActiveTab = (tab) => {
+        setSearchParams((current) => {
+            const next = new URLSearchParams(current);
+            if (tab === 'today') {
+                next.delete('tab');
+            } else {
+                next.set('tab', tab);
+            }
+            return next;
+        });
+    };
+
     // Update "now" every minute so countdowns stay fresh
     useEffect(() => {
         const id = setInterval(() => {
             setNow(new Date());
         }, 60000);
-        return () => clearInterval(id);
-    }, []);
-
-    // Periodically ask backend which reminders are due within the last
-    // 1 minute; this also lets the backend auto-advance reminders that
-    // are more than 1 minute old (markNotified logic).
-    useEffect(() => {
-        const pollDue = async () => {
-            try {
-                await fetch(`${BACKEND_API_ENDPOINT}/reminder/due`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                });
-                // After backend updates repeating/expired reminders,
-                // refresh full list so UI stays in sync.
-                await loadData();
-            } catch (e) {
-                console.error('Error polling due reminders:', e);
-            }
-        };
-
-        // Run once on mount, then every 60 seconds
-        pollDue();
-        const id = setInterval(pollDue, 60000);
         return () => clearInterval(id);
     }, []);
 
@@ -91,6 +86,20 @@ function MyReminders() {
 
     useEffect(() => {
         loadData();
+    }, []);
+
+    useEffect(() => {
+        const handleReminderUpdated = () => {
+            loadData();
+            setTimeout(() => {
+                loadData();
+            }, 1200);
+        };
+
+        window.addEventListener('reminders:updated', handleReminderUpdated);
+        return () => {
+            window.removeEventListener('reminders:updated', handleReminderUpdated);
+        };
     }, []);
 
 

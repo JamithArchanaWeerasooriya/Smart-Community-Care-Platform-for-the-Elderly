@@ -26,6 +26,7 @@ nlu:
     - සෑම
     - හැමදාම
     - හැමදම
+    - සම්පූර්ණ
 
 - synonym: hour
   examples: |
@@ -39,3 +40,31 @@ nlu:
 - synonym: repeat
   examples: |
     - න්
+
+- synonym: up
+  examples: |
+    - උඩට
+    - ඉහලට
+
+- synonym: down
+  examples: |
+    - යටට
+    - පහලට
+    - පහළට
+
+- synonym: today
+  examples: |
+    - අද
+
+- synonym: upcoming
+  examples: |
+    - ඉදිරියේ
+    - ඉදිරියේදී
+    - ඉදිරිය
+    - ඉස්සරහට
+    - ඉස්සරහ
+    - ඊළඟට
+    - ඊළඟ
+    - කමින්
+    - අප්කමින්
+    - upcoming
