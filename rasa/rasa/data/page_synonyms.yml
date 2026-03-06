@@ -16,6 +16,16 @@ nlu:
     - රිමයින්ටස්
     - රිමයින්ඩර්ස්
     - reminders
+- synonym: emotion-monitor
+  examples: |
+    - හිතේ තත්වෙ
+    - දැනෙන විදිහ
+    - මූඩ්
+    - කොහොමද ඉන්නෙ
+    - ඉමෝෂන්ස්
+    - හිත
+    - හැඟීම්
+    - දැනෙන්නෙ
 
 - synonym: all
   examples: |
