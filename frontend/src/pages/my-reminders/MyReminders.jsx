@@ -4,6 +4,36 @@ import 'material-icons/iconfont/material-icons.css';
 import { useSearchParams } from 'react-router-dom';
 const BACKEND_API_ENDPOINT = import.meta.env.VITE_BACKEND_API_ENDPOINT;
 const TAB_KEYS = ['today', 'upcoming', 'past', 'all'];
+const TAB_CONFIG = {
+    today: {
+        label: 'Today',
+        description: 'The reminders that matter most right now.',
+    },
+    upcoming: {
+        label: 'Upcoming',
+        description: 'Everything scheduled after today.',
+    },
+    past: {
+        label: 'Past',
+        description: 'Older reminders and completed items.',
+    },
+    all: {
+        label: 'All',
+        description: 'Your complete reminder timeline in one place.',
+    },
+};
+
+const TYPE_ICON_MAP = {
+    Medicine: 'medication',
+    Appointment: 'calendar_month',
+    Custom: 'task_alt',
+};
+
+const BOARD_INSIGHT_CONFIG = [
+    { key: 'due', label: 'Need attention', icon: 'notifications_active', tone: 'danger' },
+    { key: 'routine', label: 'Recurring', icon: 'autorenew', tone: 'success' },
+    { key: 'done', label: 'Finished', icon: 'task_alt', tone: 'neutral' },
+];
 
 function MyReminders() {
     // State
@@ -508,25 +538,83 @@ function MyReminders() {
     else if (currentHour < 18) greeting = 'Good afternoon';
 
     const headerDate = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    const activeTabMeta = TAB_CONFIG[activeTab];
+    const dueCount = reminders.filter((r) => isReminderDueWithinWindow(r, now)).length;
+    const completedCount = reminders.filter((r) => r.completed).length;
+    const activeRoutineCount = reminders.filter((r) => isRepeatingReminder(r) && !r.completed).length;
+    const nextUpcomingReminder = reminders.find((r) => {
+        const nextDate = getNextReminderDate(r, now);
+        return nextDate && nextDate.getTime() > now.getTime() && !r.completed;
+    }) || null;
+    const isFilteredEmpty = reminders.length > 0 && sectionData.length === 0;
+    const boardInsights = {
+        due: dueCount,
+        routine: activeRoutineCount,
+        done: completedCount,
+    };
 
     return (
         <div className="my-reminders-app">
 
             <div className="app-content">
                 <header className="app-header">
-                    <div className="header-text">
-                        <p className="greeting-date">{headerDate}</p>
-                        <h1 className="greeting-title">{greeting}!</h1>
-                        <p className="greeting-subtitle">Here is your schedule for {activeTab}.</p>
+                    <div className="header-hero">
+                        <div className="header-copy">
+                            <div className="header-text">
+                                <p className="greeting-date">{headerDate}</p>
+                                <h1 className="greeting-title">{greeting}!</h1>
+                                <p className="greeting-subtitle">Keep track of medicines, appointments, and daily routines from one place.</p>
+                            </div>
+                            <div className="header-actions">
+                                <button type="button" className="btn-icon" onClick={loadData} disabled={loading} aria-label="Refresh">
+                                    <span className="material-icons">{loading ? 'sync' : 'refresh'}</span>
+                                </button>
+                                <button type="button" className="btn-primary" onClick={openModal}>
+                                    <span className="material-icons">add</span>
+                                    New Reminder
+                                </button>
+                            </div>
+                        </div>
+
+                        <aside className="header-highlight" aria-label="Next reminder summary">
+                            <p className="header-highlight-label">Next reminder</p>
+                            {nextUpcomingReminder ? (
+                                <>
+                                    <h2 className="header-highlight-title">{nextUpcomingReminder.title}</h2>
+                                    <p className="header-highlight-meta">{formatDate(nextUpcomingReminder, now)}</p>
+                                    <p className="header-highlight-desc">{formatFrequencyDetail(nextUpcomingReminder)}</p>
+                                </>
+                            ) : (
+                                <>
+                                    <h2 className="header-highlight-title">No pending reminders</h2>
+                                    <p className="header-highlight-desc">Your schedule is clear right now. Add a reminder to stay on top of medications, visits, or daily tasks.</p>
+                                </>
+                            )}
+                        </aside>
                     </div>
-                    <div className="header-actions">
-                        <button className="btn-icon" onClick={loadData} disabled={loading} aria-label="Refresh">
-                            <span className="material-icons">{loading ? 'sync' : 'refresh'}</span>
-                        </button>
-                        <button className="btn-primary" onClick={openModal}>
-                            <span className="material-icons">add</span>
-                            New Reminder
-                        </button>
+
+                    <div className="header-stats" aria-label="Reminder summary">
+                        <article className="summary-card tone-blue">
+                            <span className="material-icons summary-icon">notifications_active</span>
+                            <div>
+                                <p className="summary-label">Due now</p>
+                                <p className="summary-value">{dueCount}</p>
+                            </div>
+                        </article>
+                        <article className="summary-card tone-green">
+                            <span className="material-icons summary-icon">autorenew</span>
+                            <div>
+                                <p className="summary-label">Active routines</p>
+                                <p className="summary-value">{activeRoutineCount}</p>
+                            </div>
+                        </article>
+                        <article className="summary-card tone-amber">
+                            <span className="material-icons summary-icon">task_alt</span>
+                            <div>
+                                <p className="summary-label">Completed</p>
+                                <p className="summary-value">{completedCount}</p>
+                            </div>
+                        </article>
                     </div>
                 </header>
 
@@ -538,95 +626,138 @@ function MyReminders() {
                 )}
 
                 <main className="main-board">
-                    <div className="segmented-control">
-                        {['today', 'upcoming', 'past', 'all'].map((t) => {
-                            const labels = { today: 'Today', upcoming: 'Upcoming', past: 'Past', all: 'All' };
-                            return (
-                                <button
-                                    key={t}
-                                    className={`segment-btn ${activeTab === t ? 'active' : ''}`}
-                                    onClick={() => setActiveTab(t)}
-                                >
-                                    {labels[t]}
-                                </button>
-                            );
-                        })}
-                    </div>
-
-                    {loading ? (
-                        <div className="cards-grid skeleton-grid">
-                            <div className="skeleton-card"></div>
-                            <div className="skeleton-card"></div>
-                            <div className="skeleton-card"></div>
-                        </div>
-                    ) : reminders.length === 0 ? (
-                        <div className="empty-state-glass">
-                            <div className="empty-icon-wrap">
-                                <span className="material-icons">event_available</span>
+                    <section className="board-shell">
+                        <div className="board-header-row">
+                            <div>
+                                <p className="board-eyebrow">Viewing</p>
+                                <h2 className="board-title">{activeTabMeta.label} reminders</h2>
+                                <p className="board-subtitle">{activeTabMeta.description}</p>
                             </div>
-                            <h3>All Caught Up</h3>
-                            <p>You have no reminders to display right now.</p>
-                            <button className="btn-secondary mt-4" onClick={openModal}>Get Started</button>
+                            <div className="board-count-chip">
+                                <span className="material-icons">view_agenda</span>
+                                {sectionData.length} shown
+                            </div>
                         </div>
-                    ) : (
-                        <div className="cards-grid">
-                            {sectionData.map((r, i) => {
-                                // Assigning a border color class based on type
-                                const typeClass = (r.type || 'Custom').toLowerCase();
-                                const staggerDelay = `${0.1 + (i * 0.05)}s`;
-                                return (
-                                    <div
-                                        key={r._id}
-                                        className={`reminder-card type-${typeClass} ${r.completed ? 'is-completed' : ''}`}
-                                        style={{ animationDelay: staggerDelay }}
-                                    >
-                                        <div className="card-top">
-                                            <div className="card-time">
-                                                <span className="material-icons schedule-icon">schedule</span>
-                                                {formatDate(r, now)}
-                                            </div>
-                                            <ReminderStatus r={r} />
-                                        </div>
 
-                                        <div className="card-body">
-                                            <h3 className="card-title">{r.title}</h3>
-                                            {r.description && <p className="card-desc">{r.description}</p>}
-                                        </div>
+                        <div className="segmented-control" role="tablist" aria-label="Reminder sections">
+                            {TAB_KEYS.map((tab) => (
+                                <button
+                                    key={tab}
+                                    type="button"
+                                    role="tab"
+                                    aria-selected={activeTab === tab}
+                                    className={`segment-btn ${activeTab === tab ? 'active' : ''}`}
+                                    onClick={() => setActiveTab(tab)}
+                                >
+                                    {TAB_CONFIG[tab].label}
+                                </button>
+                            ))}
+                        </div>
 
-                                        <div className="card-tags">
-                                            <span className="tag type-tag">
-                                                <span className="material-icons">local_pharmacy</span>
-                                                {r.type || 'Custom'}
-                                            </span>
-                                            <span className="tag freq-tag">
-                                                <span className="material-icons">autorenew</span>
-                                                {formatFrequencyDetail(r)}
-                                            </span>
-                                            {formatCountdown(r, now) && (
-                                                <span className="tag countdown-tag">
-                                                    <span className="material-icons">hourglass_empty</span>
-                                                    {formatCountdown(r, now)}
+                        <div className="board-insight-row" aria-label="Reminder insights">
+                            {BOARD_INSIGHT_CONFIG.map((item) => (
+                                <div key={item.key} className={`board-insight-pill tone-${item.tone}`}>
+                                    <span className="material-icons">{item.icon}</span>
+                                    <span>{item.label}</span>
+                                    <strong>{boardInsights[item.key]}</strong>
+                                </div>
+                            ))}
+                        </div>
+
+                        {loading ? (
+                            <div className="cards-grid skeleton-grid">
+                                <div className="skeleton-card"></div>
+                                <div className="skeleton-card"></div>
+                                <div className="skeleton-card"></div>
+                            </div>
+                        ) : reminders.length === 0 ? (
+                            <div className="empty-state-glass">
+                                <div className="empty-icon-wrap">
+                                    <span className="material-icons">event_available</span>
+                                </div>
+                                <h3>All Caught Up</h3>
+                                <p>You have no reminders to display right now.</p>
+                                <button type="button" className="btn-secondary mt-4" onClick={openModal}>Get Started</button>
+                            </div>
+                        ) : isFilteredEmpty ? (
+                            <div className="empty-state-glass compact">
+                                <div className="empty-icon-wrap small">
+                                    <span className="material-icons">filter_alt_off</span>
+                                </div>
+                                <h3>No reminders in this section</h3>
+                                <p>Try another tab or create a new reminder to fill this view.</p>
+                            </div>
+                        ) : (
+                            <div className="cards-grid">
+                                {sectionData.map((r, i) => {
+                                    const reminderType = r.type || 'Custom';
+                                    const typeClass = reminderType.toLowerCase();
+                                    const typeIcon = TYPE_ICON_MAP[reminderType] || 'task_alt';
+                                    const staggerDelay = `${0.1 + (i * 0.05)}s`;
+                                    const countdown = formatCountdown(r, now);
+                                    return (
+                                        <article
+                                            key={r._id}
+                                            className={`reminder-card type-${typeClass} ${r.completed ? 'is-completed' : ''}`}
+                                            style={{ animationDelay: staggerDelay }}
+                                        >
+                                            <div className="card-top">
+                                                <span className="card-type-pill">
+                                                    <span className="material-icons">{typeIcon}</span>
+                                                    {reminderType}
                                                 </span>
-                                            )}
-                                        </div>
+                                                <div className="card-actions-hover">
+                                                    <button type="button" className="icon-action-btn edit-btn" onClick={() => onEdit(r)} title="Edit" aria-label={`Edit ${r.title}`}>
+                                                        <span className="material-icons">edit</span>
+                                                    </button>
+                                                    <button type="button" className="icon-action-btn delete-btn" onClick={() => onDelete(r)} title="Delete" aria-label={`Delete ${r.title}`}>
+                                                        <span className="material-icons">delete</span>
+                                                    </button>
+                                                </div>
+                                            </div>
 
-                                        <div className="card-actions-hover">
-                                            <button className="icon-action-btn edit-btn" onClick={() => onEdit(r)} title="Edit">
-                                                <span className="material-icons">edit</span>
-                                            </button>
-                                            <button className="icon-action-btn delete-btn" onClick={() => onDelete(r)} title="Delete">
-                                                <span className="material-icons">delete</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )}
+                                            <div className="card-schedule-row">
+                                                <div className="card-time">
+                                                    <span className="material-icons schedule-icon">schedule</span>
+                                                    {formatDate(r, now)}
+                                                </div>
+                                                <ReminderStatus r={r} />
+                                            </div>
+
+                                            <div className="card-body">
+                                                <h3 className="card-title">{r.title}</h3>
+                                                {r.description && <p className="card-desc">{r.description}</p>}
+                                            </div>
+
+                                            {countdown && (
+                                                <div className="card-countdown-banner">
+                                                    <span className="material-icons">hourglass_top</span>
+                                                    <span>{countdown === 'Now' ? 'Happening now' : `Starts in ${countdown}`}</span>
+                                                </div>
+                                            )}
+
+                                            <div className="card-tags">
+                                                <span className="tag freq-tag">
+                                                    <span className="material-icons">autorenew</span>
+                                                    {formatFrequencyDetail(r)}
+                                                </span>
+                                                {countdown && (
+                                                    <span className="tag countdown-tag">
+                                                        <span className="material-icons">hourglass_empty</span>
+                                                        {countdown}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </article>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </section>
                 </main>
 
                 {/* Mobile Floating Action Button */}
-                <button className="mobile-fab" onClick={openModal} aria-label="Add Reminder">
+                <button type="button" className="mobile-fab" onClick={openModal} aria-label="Add Reminder">
                     <span className="material-icons">add</span>
                 </button>
             </div>
@@ -635,10 +766,14 @@ function MyReminders() {
             {isModalOpen && (
                 <div className="modal-backdrop">
                     <div className="modal-content">
-                        <button className="modal-close" onClick={closeModal} aria-label="Close modal">
+                        <button type="button" className="modal-close" onClick={closeModal} aria-label="Close modal">
                             <span className="material-icons">close</span>
                         </button>
-                        <h2 className="modal-title">{selectedReminder ? 'Edit Reminder' : 'Create Reminder'}</h2>
+                        <div className="modal-header-block">
+                            <p className="modal-eyebrow">Reminder details</p>
+                            <h2 className="modal-title">{selectedReminder ? 'Edit Reminder' : 'Create Reminder'}</h2>
+                            <p className="modal-subtitle">Set the title, time, and repeat pattern clearly so the reminder is easy to scan later.</p>
+                        </div>
 
                         <form onSubmit={onSubmit} className="modern-form" noValidate>
                             <div className="input-group">
