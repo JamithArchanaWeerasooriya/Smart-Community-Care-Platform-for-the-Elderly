@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import Header from './components/header/Header';
 import Home from './pages/home/Home';
 import MyReminders from './pages/my-reminders/MyReminders';
-import EmotionMonitor from './pages/emotion-monitor/EmotionMonitor';
+import EmotionMonitor from './pages/emotion-monitor/EmotionDashboard';
 import SleepMonitor from './pages/sleep-monitor/SleepMonitor';
 import VoiceButton from './components/VoiceButton/VoiceButton';
 import { init, handleIntent, setNavigate } from './components/VoiceButton/VoiceController.js';
