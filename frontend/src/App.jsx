@@ -9,6 +9,7 @@ import SleepMonitor from './pages/sleep-monitor/SleepMonitor';
 import FallDetection from './pages/fall-detection/FallDetection.jsx';
 import VoiceButton from './components/VoiceButton/VoiceButton';
 import { init, handleIntent, setNavigate } from './components/VoiceButton/VoiceController.js';
+import CaregiverDashboard from './pages/caregiver/CaregiverDashboard.jsx';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/caregiver/*" element={<CaregiverDashboard />} />
         <Route path="*" element={(<LayoutWithHeader/>)}/>
       </Routes>
     </BrowserRouter>
