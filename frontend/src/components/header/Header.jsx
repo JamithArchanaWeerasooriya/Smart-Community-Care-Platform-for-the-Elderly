@@ -1,124 +1,177 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react';
 import './Header.css';
-import HeaderNavButton from './NavButton';
-import HeaderButton from './HeaderButton';
 import 'material-icons/iconfont/material-icons.css';
-import Logo from '../../assets/react.svg';
-import ProfileVector from '../../assets/react.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthToken, useCurrentUserType } from '../../auth';
 
+const NAV_ITEMS = [
+  { id: '',               label: 'Home',            icon: 'home' },
+  { id: 'my-reminders',   label: 'Reminders',       icon: 'medication' },
+  { id: 'emotion-monitor',label: 'Emotion Monitor', icon: 'psychology' },
+  { id: 'sleep-monitor',  label: 'Sleep Monitor',   icon: 'bedtime' },
+  { id: 'fall-detection', label: 'Fall Detection',  icon: 'personal_injury' },
+  { id: 'caregiver',      label: 'Caregiver',       icon: 'favorite' },
+];
+
 function Header() {
+  const authToken  = useAuthToken();
+  const location   = useLocation();
+  const navigate   = useNavigate();
+  const [activePage, setActivePage] = useState('');
+  const [scrolled,   setScrolled]   = useState(false);
+  const [menuOpen,   setMenuOpen]   = useState(false);
+  const [time,       setTime]       = useState(new Date());
+  const indicatorRef = useRef(null);
+  const navRef       = useRef(null);
 
-    var authToken = useAuthToken();
-    var userType = useCurrentUserType();
-    const [activePage, setActivePage] = useState(null);
-    var location = useLocation();
-    var navigate = useNavigate();
+  useEffect(() => {
+    setActivePage(getPageId(location.pathname));
+    setMenuOpen(false);
+  }, [location.pathname]);
 
-    useEffect(function () {
-        setActivePage(getPageId(location.pathname));
-    });
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
-    function navItemClick(id) {
-        navigate("/"+id);
+  useEffect(() => {
+    const id = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  // Sliding indicator under active nav item
+  useEffect(() => {
+    if (!navRef.current || !indicatorRef.current) return;
+    const activeEl = navRef.current.querySelector('.hdr-nav-item.active');
+    if (activeEl) {
+      const navRect  = navRef.current.getBoundingClientRect();
+      const itemRect = activeEl.getBoundingClientRect();
+      indicatorRef.current.style.width   = `${itemRect.width - 16}px`;
+      indicatorRef.current.style.left    = `${itemRect.left - navRect.left + 8}px`;
+      indicatorRef.current.style.opacity = '1';
+    } else {
+      indicatorRef.current.style.opacity = '0';
     }
+  }, [activePage]);
 
-    function onSignUpButtonClick() {
-        navigate("/signup"); // This will navigate to the SignUp page when the button is clicked
-    }
-    function onLoginButtonClick() {
-        navigate("/login");// This will navigate to the Login page when the button is clicked
-    }
-    function onNotificationButtonClick() {
-        navigate("/notification");
-    }
-    function onCartButtonClick() {
-        navigate("/cart");
-    }
-    function onSignOutClick() {
-        navigate("/signout");
-    }
-    function onProfileButtonClick() {
-        navigate("/profile");
-    }
+  const go = (id) => navigate('/' + id);
 
-    return (
-        <div className="header">
-            <div className="header-top">
-                <div className="logo">
-                    <img src={Logo} />
-                </div>
-                <div className="header-right">
+  const timeStr = time.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  const dateStr = time.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 
-                    {(authToken == null) ?
-                        (
+  return (
+    <>
+      <header className={`hdr ${scrolled ? 'hdr--scrolled' : ''}`}>
 
-                            <>
-                                {/* <div className='div-btn' id="login" onClick={onLoginButtonClick}>
-                                    <button className='signin-button'>Login</button>
-                                </div>
-                                <div className='div-btn' id="signup" onClick={onSignUpButtonClick}>
-                                    <button className='signup-button'>Sign Up</button>
-                                </div> */}
-                            </>
+        {/* ── Top bar ── */}
+        <div className="hdr-top">
 
-                        ) : (
-
-                            <>
-
-                                <div className='div-btn' id="signout" onClick={onSignOutClick}>
-                                    <button className='signout-button'>Sign Out</button>
-                                </div>
-                                <HeaderButton id="notification" activeId={activePage} onClick={onNotificationButtonClick}>
-                                    <span className="material-icons-outlined">notifications</span>
-                                </HeaderButton>
-                                <HeaderButton id="cart" activeId={activePage} onClick={onCartButtonClick}>
-                                    <span className="material-icons-outlined">shopping_bag</span>
-                                </HeaderButton>
-
-                                <div className="profile" onClick={onProfileButtonClick}>
-                                    <div className="profile-picture">
-                                        <img src={ProfileVector} />
-                                    </div>
-                                </div>
-                            </>
-
-                        )}
-
-                </div>
+          {/* Logo */}
+          <button className="hdr-logo" onClick={() => go('')}>
+            <div className="hdr-logo-icon">
+              <span className="material-icons">favorite</span>
             </div>
-            <div className="header-nav">
-
-                <HeaderNavButton id="" activeId={activePage} name="Home" onClick={(id) => { navItemClick(id) }} />
-                <HeaderNavButton id="my-reminders" activeId={activePage} name="My Reminders" onClick={(id) => { navItemClick(id) }} />
-                <HeaderNavButton id="emotion-monitor" activeId={activePage} name="Emotion Monitor" onClick={(id) => { navItemClick(id) }} />
-                <HeaderNavButton id="sleep-monitor" activeId={activePage} name="Sleep Monitor" onClick={(id) => { navItemClick(id) }} />
-                <HeaderNavButton id="fall-detection" activeId={activePage} name="Fall Detection" onClick={(id) => { navItemClick(id) }} />
-                <HeaderNavButton id="caregiver" activeId={activePage} name="🩺 Caregiver" onClick={(id) => { navItemClick(id) }} />
-
-                {/* <HeaderNavButton id="my-app" activeId={activePage} name="My Appoinments" onClick={(id) => { navItemClick(id) }} />
-                <HeaderNavButton id="service" activeId={activePage} name="Our Service" onClick={(id) => { navItemClick(id) }} />
-                <HeaderNavButton id="store" activeId={activePage} name="Our Store" onClick={(id) => { navItemClick(id) }} />
-                <HeaderNavButton id="contact" activeId={activePage} name="Contact Us" onClick={(id) => { navItemClick(id) }} />
-                
-                {(userType != null & userType == "employee")?(
-                    <HeaderNavButton id="leave" activeId={activePage} name="Leave" onClick={(id) => { navItemClick(id) }} />
-                ):("")} */}
-
+            <div className="hdr-logo-text">
+              <span className="hdr-logo-name">CareVision</span>
+              <span className="hdr-logo-sub">Smart Elder Care</span>
             </div>
+          </button>
+
+          {/* Live clock */}
+          <div className="hdr-clock">
+            <span className="hdr-clock-time">{timeStr}</span>
+            <span className="hdr-clock-date">{dateStr}</span>
+          </div>
+
+          {/* Right actions */}
+          <div className="hdr-actions">
+            {authToken != null && (
+              <>
+                <button className="hdr-icon-btn" onClick={() => navigate('/notification')} title="Notifications">
+                  <span className="material-icons">notifications</span>
+                  <span className="hdr-icon-dot" />
+                </button>
+                <button className="hdr-icon-btn" onClick={() => navigate('/profile')} title="Profile">
+                  <span className="material-icons">account_circle</span>
+                </button>
+                <button className="hdr-signout-btn" onClick={() => navigate('/signout')}>
+                  <span className="material-icons">logout</span>
+                  Sign Out
+                </button>
+              </>
+            )}
+            {/* Hamburger for mobile */}
+            <button
+              className={`hdr-hamburger ${menuOpen ? 'open' : ''}`}
+              onClick={() => setMenuOpen(p => !p)}
+              aria-label="Toggle menu"
+            >
+              <span /><span /><span />
+            </button>
+          </div>
         </div>
-    );
+
+        {/* ── Nav bar ── */}
+        <nav className="hdr-nav-wrap">
+          <div className="hdr-nav" ref={navRef}>
+            {NAV_ITEMS.map(item => (
+              <button
+                key={item.id}
+                className={`hdr-nav-item ${activePage === item.id ? 'active' : ''}`}
+                onClick={() => go(item.id)}
+              >
+                <span className="material-icons hdr-nav-icon">{item.icon}</span>
+                <span className="hdr-nav-label">{item.label}</span>
+              </button>
+            ))}
+            <div className="hdr-nav-indicator" ref={indicatorRef} />
+          </div>
+        </nav>
+      </header>
+
+      {/* ── Mobile drawer ── */}
+      <div className={`hdr-mobile-overlay ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(false)}>
+        <div className="hdr-mobile-drawer" onClick={e => e.stopPropagation()}>
+          <div className="hdr-mobile-header">
+            <div className="hdr-logo-icon" style={{ width: 36, height: 36, borderRadius: 10 }}>
+              <span className="material-icons" style={{ fontSize: '1rem' }}>favorite</span>
+            </div>
+            <span style={{ fontWeight: 800, fontSize: '1rem', color: '#0f1d2e', marginLeft: 10 }}>CareVision</span>
+            <button className="hdr-icon-btn" style={{ marginLeft: 'auto' }} onClick={() => setMenuOpen(false)}>
+              <span className="material-icons">close</span>
+            </button>
+          </div>
+          {NAV_ITEMS.map(item => (
+            <button
+              key={item.id}
+              className={`hdr-mobile-item ${activePage === item.id ? 'active' : ''}`}
+              onClick={() => go(item.id)}
+            >
+              <span className="material-icons">{item.icon}</span>
+              {item.label}
+            </button>
+          ))}
+          {authToken != null && (
+            <button
+              className="hdr-mobile-item"
+              style={{ color: '#df5a6a', marginTop: 8, borderTop: '1px solid #f1f5f9', paddingTop: 14 }}
+              onClick={() => navigate('/signout')}
+            >
+              <span className="material-icons">logout</span>
+              Sign Out
+            </button>
+          )}
+        </div>
+      </div>
+    </>
+  );
 }
 
 function getPageId(path) {
-    path = path.substring(1, path.length);
-    const firstIndex = path.indexOf("/");
-    if (firstIndex == -1) {
-        return path;
-    } else {
-        return path.substring(0, firstIndex);
-    }
+  const p = path.substring(1);
+  const idx = p.indexOf('/');
+  return idx === -1 ? p : p.substring(0, idx);
 }
 
 export default Header;

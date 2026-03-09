@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import 'material-icons/iconfont/material-icons.css';
 import './CaregiverDashboard.css';
 import {
@@ -94,9 +95,7 @@ async function apiFetch(path, opts = {}) {
   return res.json();
 }
 
-// ════════════════════════════════════════════════════════════════════
 //  MAIN COMPONENT
-// ════════════════════════════════════════════════════════════════════
 export default function CaregiverDashboard() {
   const [page,   setPage]   = useState('overview');
   const [toasts, setToasts] = useState([]);
@@ -135,8 +134,45 @@ export default function CaregiverDashboard() {
 
   const tt = topbarTitles[page];
 
+  const navigate = useNavigate();
+
   return (
     <div className="cg-app">
+
+      {/* ── Site Header Bar ── */}
+      <div className="cg-site-header">
+        <button className="cg-site-header-back" onClick={() => navigate('/')}>
+          <span className="material-icons">arrow_back_ios</span>
+          Back to App
+        </button>
+        <div className="cg-site-header-brand">
+          <div className="cg-site-header-icon">
+            <span className="material-icons">favorite</span>
+          </div>
+          <span className="cg-site-header-name">CareVision</span>
+          <span className="cg-site-header-sep">·</span>
+          <span className="cg-site-header-section">Caregiver Portal</span>
+        </div>
+        <div className="cg-site-header-nav">
+          {[
+            { id: '',                label: 'Home',            icon: 'home' },
+            { id: 'my-reminders',    label: 'Reminders',       icon: 'medication' },
+            { id: 'emotion-monitor', label: 'Emotion Monitor', icon: 'psychology' },
+            { id: 'sleep-monitor',   label: 'Sleep',           icon: 'bedtime' },
+            { id: 'fall-detection',  label: 'Fall Detection',  icon: 'personal_injury' },
+          ].map(item => (
+            <button
+              key={item.id}
+              className="cg-site-header-link"
+              onClick={() => navigate('/' + item.id)}
+            >
+              <span className="material-icons">{item.icon}</span>
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="cg-layout">
 
         {/* ── Sidebar ── */}
@@ -225,9 +261,7 @@ export default function CaregiverDashboard() {
   );
 }
 
-// ════════════════════════════════════════════════════════════════════
 //  PAGE: OVERVIEW
-// ════════════════════════════════════════════════════════════════════
 function PageOverview({ toast, setPage }) {
   const [overview, setOverview] = useState(null);
   const [recentReadings, setRecentReadings] = useState([]);
@@ -384,9 +418,7 @@ function PageOverview({ toast, setPage }) {
   );
 }
 
-// ════════════════════════════════════════════════════════════════════
 //  PAGE: PATIENTS
-// ════════════════════════════════════════════════════════════════════
 function PagePatients({ toast }) {
   const [patients, setPatients]     = useState([]);
   const [selected, setSelected]     = useState(null);
@@ -627,9 +659,7 @@ function PagePatients({ toast }) {
   );
 }
 
-// ════════════════════════════════════════════════════════════════════
 //  PAGE: SESSIONS
-// ════════════════════════════════════════════════════════════════════
 function PageSessions({ toast }) {
   const [sessions, setSessions] = useState([]);
   const [total, setTotal]       = useState(0);
@@ -782,9 +812,8 @@ function PageSessions({ toast }) {
   );
 }
 
-// ════════════════════════════════════════════════════════════════════
 //  PAGE: ALERTS
-// ════════════════════════════════════════════════════════════════════
+
 function PageAlerts({ toast, onResolved }) {
   const [alerts, setAlerts]   = useState([]);
   const [total, setTotal]     = useState(0);
@@ -911,9 +940,7 @@ function PageAlerts({ toast, onResolved }) {
   );
 }
 
-// ════════════════════════════════════════════════════════════════════
 //  PAGE: READINGS (Emotion Log)
-// ════════════════════════════════════════════════════════════════════
 function PageReadings({ toast }) {
   const [readings, setReadings] = useState([]);
   const [total, setTotal]       = useState(0);
@@ -1044,9 +1071,7 @@ function PageReadings({ toast }) {
   );
 }
 
-// ════════════════════════════════════════════════════════════════════
 //  PAGE: ANALYTICS
-// ════════════════════════════════════════════════════════════════════
 function PageAnalytics({ toast }) {
   const [patients, setPatients]   = useState([]);
   const [patientId, setPatientId] = useState('');
@@ -1200,9 +1225,7 @@ function PageAnalytics({ toast }) {
   );
 }
 
-// ════════════════════════════════════════════════════════════════════
 //  PAGE: NOTES
-// ════════════════════════════════════════════════════════════════════
 function PageNotes({ toast }) {
   const [notes, setNotes]         = useState([]);
   const [total, setTotal]         = useState(0);
@@ -1365,9 +1388,7 @@ function PageNotes({ toast }) {
   );
 }
 
-// ════════════════════════════════════════════════════════════════════
 //  PAGE: SETTINGS
-// ════════════════════════════════════════════════════════════════════
 function PageSettings({ toast }) {
   const [apiUrl, setApiUrl] = useState(API);
   const [emotionApi, setEmotionApi] = useState('http://localhost:8000/detect-emotion');

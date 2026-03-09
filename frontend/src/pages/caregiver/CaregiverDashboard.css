@@ -1,3 +1,7 @@
+/* ─────────────────────────────────────────
+   CAREGIVER DASHBOARD — Full Design System
+   ───────────────────────────────────────── */
+
 .cg-app {
   --page-bg: #f0f4f8;
   --surface: rgba(255,255,255,0.90);
@@ -716,4 +720,132 @@
   .cg-sidebar { display: none; }
   .cg-grid-main-side { grid-template-columns: 1fr; }
   .cg-grid-2, .cg-grid-3 { grid-template-columns: 1fr; }
+}
+
+/* ── SITE HEADER BAR ──────────────────────── */
+.cg-site-header {
+  position: sticky;
+  top: 0;
+  z-index: 300;
+  height: 52px;
+  background: linear-gradient(135deg, #0f2a46 0%, #1a3d60 100%);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+  box-shadow: 0 2px 16px -4px rgba(15, 23, 42, 0.42);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.cg-site-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #1a9fbe, #2dd4bf, #0f9f74);
+}
+
+.cg-site-header-back {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.82);
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.cg-site-header-back:hover {
+  background: rgba(255,255,255,0.16);
+  color: #fff;
+}
+.cg-site-header-back .material-icons { font-size: 0.82rem; }
+
+.cg-site-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.cg-site-header-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #1a9fbe, #2dd4bf);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.cg-site-header-icon .material-icons { font-size: 0.9rem; }
+
+.cg-site-header-name {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #fff;
+  font-family: 'Outfit', system-ui, sans-serif;
+}
+
+.cg-site-header-sep {
+  color: rgba(255,255,255,0.25);
+  font-size: 0.9rem;
+}
+
+.cg-site-header-section {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  font-family: 'Outfit', system-ui, sans-serif;
+}
+
+.cg-site-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.cg-site-header-nav::-webkit-scrollbar { display: none; }
+
+.cg-site-header-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  border-radius: 9px;
+  border: none;
+  background: none;
+  color: rgba(255,255,255,0.55);
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.16s;
+  white-space: nowrap;
+}
+.cg-site-header-link:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+.cg-site-header-link .material-icons { font-size: 0.88rem; }
+
+/* Adjust layout so cg-app starts after site header */
+.cg-app { min-height: 100vh; }
+.cg-layout { min-height: calc(100vh - 52px); }
+.cg-sidebar { height: calc(100vh - 52px); top: 52px; }
+
+/* Responsive: hide nav links on small screens, keep back button */
+@media (max-width: 768px) {
+  .cg-site-header-nav { display: none; }
+  .cg-site-header-section { display: none; }
+  .cg-site-header-sep { display: none; }
 }
