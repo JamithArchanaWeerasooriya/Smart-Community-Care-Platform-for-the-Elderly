@@ -55,12 +55,12 @@ function Header() {
                         (
 
                             <>
-                                <div className='div-btn' id="login" onClick={onLoginButtonClick}>
+                                {/* <div className='div-btn' id="login" onClick={onLoginButtonClick}>
                                     <button className='signin-button'>Login</button>
                                 </div>
                                 <div className='div-btn' id="signup" onClick={onSignUpButtonClick}>
                                     <button className='signup-button'>Sign Up</button>
-                                </div>
+                                </div> */}
                             </>
 
                         ) : (
@@ -94,6 +94,7 @@ function Header() {
                 <HeaderNavButton id="my-reminders" activeId={activePage} name="My Reminders" onClick={(id) => { navItemClick(id) }} />
                 <HeaderNavButton id="emotion-monitor" activeId={activePage} name="Emotion Monitor" onClick={(id) => { navItemClick(id) }} />
                 <HeaderNavButton id="sleep-monitor" activeId={activePage} name="Sleep Monitor" onClick={(id) => { navItemClick(id) }} />
+                <HeaderNavButton id="fall-detection" activeId={activePage} name="Fall Detection" onClick={(id) => { navItemClick(id) }} />
 
                 {/* <HeaderNavButton id="my-app" activeId={activePage} name="My Appoinments" onClick={(id) => { navItemClick(id) }} />
                 <HeaderNavButton id="service" activeId={activePage} name="Our Service" onClick={(id) => { navItemClick(id) }} />

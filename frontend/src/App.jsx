@@ -6,6 +6,7 @@ import Home from './pages/home/Home';
 import MyReminders from './pages/my-reminders/MyReminders';
 import EmotionMonitor from './pages/emotion-monitor/EmotionDashboard';
 import SleepMonitor from './pages/sleep-monitor/SleepMonitor';
+import FallDetection from './pages/fall-detection/FallDetection.jsx';
 import VoiceButton from './components/VoiceButton/VoiceButton';
 import { init, handleIntent, setNavigate } from './components/VoiceButton/VoiceController.js';
 
@@ -35,6 +36,7 @@ function LayoutWithHeader() {
         <Route path="/my-reminders" element={<MyReminders />} />
         <Route path="/emotion-monitor" element={<EmotionMonitor />} />
         <Route path="/sleep-monitor" element={<SleepMonitor />} />
+        <Route path="/fall-detection" element={<FallDetection />} />
       </Routes>
       <VoiceButton init={init} onIntent={handleIntent}/>
     </>
