@@ -5,7 +5,7 @@ import EmotionFrequency from './EmotionFrequency';
 import EmotionDistribution from './EmotionDistribution';
 import { saveReading, startSession, endSession, generateSessionId } from './emotionApi.js';
 
-const API_URL = import.meta.env.VITE_BACKEND_API_ENDPOINT || 'http://localhost:8000/detect-emotion';
+const API_URL = import.meta.env.VITE_EMOTION_API || 'http://localhost:8000/detect-emotion';
 
 // Patient config — override via props or env
 const DEFAULT_PATIENT_ID   = import.meta.env.VITE_DEFAULT_PATIENT_ID   || 'default-patient';
