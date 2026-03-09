@@ -95,6 +95,7 @@ function Header() {
                 <HeaderNavButton id="emotion-monitor" activeId={activePage} name="Emotion Monitor" onClick={(id) => { navItemClick(id) }} />
                 <HeaderNavButton id="sleep-monitor" activeId={activePage} name="Sleep Monitor" onClick={(id) => { navItemClick(id) }} />
                 <HeaderNavButton id="fall-detection" activeId={activePage} name="Fall Detection" onClick={(id) => { navItemClick(id) }} />
+                <HeaderNavButton id="caregiver" activeId={activePage} name="🩺 Caregiver" onClick={(id) => { navItemClick(id) }} />
 
                 {/* <HeaderNavButton id="my-app" activeId={activePage} name="My Appoinments" onClick={(id) => { navItemClick(id) }} />
                 <HeaderNavButton id="service" activeId={activePage} name="Our Service" onClick={(id) => { navItemClick(id) }} />

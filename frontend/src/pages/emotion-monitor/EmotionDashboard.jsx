@@ -3,8 +3,13 @@ import './EmotionDashboard.css';
 import EmotionTimeline from './EmotionTimeline';
 import EmotionFrequency from './EmotionFrequency';
 import EmotionDistribution from './EmotionDistribution';
+import { saveReading, startSession, endSession, generateSessionId } from './emotionApi.js';
 
-const API_URL = 'http://localhost:8000/detect-emotion';
+const API_URL = import.meta.env.VITE_BACKEND_API_ENDPOINT || 'http://localhost:8000/detect-emotion';
+
+// Patient config — override via props or env
+const DEFAULT_PATIENT_ID   = import.meta.env.VITE_DEFAULT_PATIENT_ID   || 'default-patient';
+const DEFAULT_PATIENT_NAME = import.meta.env.VITE_DEFAULT_PATIENT_NAME || 'Patient';
 
 const EMOTIONS = ['happy', 'neutral', 'sad', 'angry', 'fear', 'disgust', 'surprise'];
 
@@ -51,6 +56,8 @@ export default function EmotionDashboard() {
   const [activeTab, setActiveTab] = useState('timeline');
   const [now, setNow] = useState(new Date());
   const [sessionStart, setSessionStart] = useState(null);
+  const [sessionId, setSessionId] = useState(null);
+  const [dbStatus, setDbStatus] = useState(null); // null | 'saving' | 'saved' | 'error'
 
   // Clock tick
   useEffect(() => {
@@ -103,6 +110,8 @@ export default function EmotionDashboard() {
     if (videoRef.current) videoRef.current.srcObject = null;
   }, []);
 
+  const sessionIdRef = useRef(null);
+
   const captureAndSend = useCallback(async () => {
     if (!videoRef.current || !canvasRef.current) return;
     const video = videoRef.current;
@@ -122,6 +131,17 @@ export default function EmotionDashboard() {
           const record = { time: formatTime(new Date()), emotion: data.emotion, confidence: data.confidence ?? null, ts: Date.now() };
           setCurrentEmotion(record);
           setHistory(prev => [...prev.slice(-200), record]);
+          // Persist to MongoDB
+          setDbStatus('saving');
+          const saved = await saveReading({
+            emotion: data.emotion,
+            confidence: data.confidence ?? null,
+            sessionId: sessionIdRef.current,
+            patientId: DEFAULT_PATIENT_ID,
+            patientName: DEFAULT_PATIENT_NAME,
+          });
+          setDbStatus(saved?.success ? 'saved' : 'error');
+          setTimeout(() => setDbStatus(null), 2000);
         }
       } catch { /* network errors silently skipped */ }
       finally { setIsAnalyzing(false); }
@@ -131,16 +151,27 @@ export default function EmotionDashboard() {
   const startMonitoring = useCallback(async () => {
     const ok = await startCamera();
     if (!ok) return;
+    const sid = generateSessionId();
+    sessionIdRef.current = sid;
+    setSessionId(sid);
     setHistory([]);
     setCurrentEmotion(null);
     setSessionStart(new Date());
     setIsMonitoring(true);
+    // Create session in MongoDB
+    await startSession({ sessionId: sid, patientId: DEFAULT_PATIENT_ID, patientName: DEFAULT_PATIENT_NAME });
     intervalRef.current = setInterval(captureAndSend, 2000);
   }, [startCamera, captureAndSend]);
 
   const stopMonitoring = useCallback(() => {
     clearInterval(intervalRef.current);
     stopCamera();
+    // End session in MongoDB
+    if (sessionIdRef.current) {
+      endSession({ sessionId: sessionIdRef.current });
+    }
+    sessionIdRef.current = null;
+    setSessionId(null);
     setIsMonitoring(false);
     setIsAnalyzing(false);
   }, [stopCamera]);
@@ -221,6 +252,12 @@ export default function EmotionDashboard() {
                 <h2 className="ed-header-highlight-title">No emotion detected yet</h2>
               )}
               <p className="ed-header-highlight-desc">Captures a frame every 2 seconds and sends to the emotion API.</p>
+              {dbStatus && (
+                <p style={{ fontSize: '0.72rem', marginTop: 6, fontWeight: 700,
+                  color: dbStatus === 'saved' ? '#0f9f74' : dbStatus === 'error' ? '#df5a6a' : '#176b87' }}>
+                  {dbStatus === 'saving' ? '⏳ Saving to MongoDB…' : dbStatus === 'saved' ? '✓ Saved to MongoDB' : '⚠ MongoDB save failed'}
+                </p>
+              )}
             </aside>
           </div>
 
