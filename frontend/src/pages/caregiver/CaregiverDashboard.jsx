@@ -7,7 +7,7 @@ import {
 } from 'recharts';
 
 // ── Config ────────────────────────────────────────────────────────
-const API = import.meta.env.VITE_CAREGIVER_API || 'http://localhost:3001/api';
+const API = (import.meta.env.VITE_CAREGIVER_API || 'http://localhost:3001/api') + '/caregiver';
 
 const EMOTION_META = {
   happy:    { color: '#0f9f74', bg: '#e8fbf4', textColor: '#0e5f4a', icon: 'sentiment_very_satisfied',   label: 'Happy' },

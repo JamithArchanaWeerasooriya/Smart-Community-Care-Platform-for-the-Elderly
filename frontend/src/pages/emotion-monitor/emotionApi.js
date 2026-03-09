@@ -4,7 +4,8 @@
  * Import these in EmotionDashboard.jsx to enable persistence.
  */
 
-const CAREGIVER_API = import.meta.env.VITE_CAREGIVER_API || 'http://localhost:3001/api';
+// Points to your existing backend at /api/caregiver/...
+const CAREGIVER_API = (import.meta.env.VITE_CAREGIVER_API || 'http://localhost:3001/api') + '/caregiver';
 
 /** Save a single emotion reading */
 export async function saveReading({ emotion, confidence, sessionId, patientId, patientName }) {
