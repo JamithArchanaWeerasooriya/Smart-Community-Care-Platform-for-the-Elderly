@@ -1,0 +1,114 @@
+```notebook-python
+# Set random seeds for reproducibility
+np.random.seed(42)
+tf.random.set_seed(42)
+
+# Configuration
+DATASET_PATH = '/content/drive/MyDrive/facial_emotions/EMOTIONS_processed_data'
+IMG_SIZE = 48  # Standard size for emotion detection
+BATCH_SIZE = 64
+EPOCHS = 50
+LEARNING_RATE = 0.001
+
+
+# Verify dataset path
+if not os.path.exists(DATASET_PATH):
+    print(f"Error: Dataset path {DATASET_PATH} does not exist!")
+    print("Please update DATASET_PATH to your actual dataset location")
+else:
+    classes = sorted(os.listdir(DATASET_PATH))
+    print(f"Found {len(classes)} classes: {classes}")
+    for cls in classes:
+        count = len(os.listdir(os.path.join(DATASET_PATH, cls)))
+        print(f"{cls}: {count} images")
+
+# ========================================================================
+# This section limits each class to 5900 images to reduce training time
+# DELETE THIS ENTIRE SECTION when it want to use the full dataset
+
+import shutil
+import random
+
+LIMIT_PER_CLASS = 5900  # Number of images to use per class
+TEMP_DATASET_PATH = '/content/limited_dataset'
+
+print(f"\n{'='*80}")
+print(f"LIMITING DATASET: Using only {LIMIT_PER_CLASS} images per class")
+print(f"{'='*80}\n")
+
+# Create temporary dataset directory
+if os.path.exists(TEMP_DATASET_PATH):
+    shutil.rmtree(TEMP_DATASET_PATH)
+os.makedirs(TEMP_DATASET_PATH)
+
+# Copy limited images for each class
+for class_name in classes:
+    src_class_path = os.path.join(DATASET_PATH, class_name)
+    dst_class_path = os.path.join(TEMP_DATASET_PATH, class_name)
+    os.makedirs(dst_class_path)
+
+    # Get all image files
+    all_images = [f for f in os.listdir(src_class_path)
+                  if f.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp'))]
+
+    # Randomly select images
+    selected_images = random.sample(all_images, min(LIMIT_PER_CLASS, len(all_images)))
+
+    # Copy selected images
+    for img in selected_images:
+        shutil.copy2(os.path.join(src_class_path, img), os.path.join(dst_class_path, img))
+
+    print(f"Copied {len(selected_images)} images for class: {class_name}")
+
+# Update dataset path to use limited dataset
+DATASET_PATH = TEMP_DATASET_PATH
+print(f"\nDataset path updated to: {DATASET_PATH}")
+print(f"{'='*80}\n")
+
+# ==================== END OF DATASET SIZE LIMITER ====================
+
+# Data augmentation for training
+train_datagen = ImageDataGenerator(
+    rescale=1./255,
+    rotation_range=20,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True,
+    fill_mode='nearest',
+    validation_split=0.2  # 80% train, 20% validation
+)
+
+# Only rescaling for validation
+val_datagen = ImageDataGenerator(
+    rescale=1./255,
+    validation_split=0.2
+)
+
+# Create training generator
+train_generator = train_datagen.flow_from_directory(
+    DATASET_PATH,
+    target_size=(IMG_SIZE, IMG_SIZE),
+    batch_size=BATCH_SIZE,
+    class_mode='categorical',
+    color_mode='grayscale',
+    subset='training',
+    shuffle=True
+)
+
+# Create validation generator
+validation_generator = val_datagen.flow_from_directory(
+    DATASET_PATH,
+    target_size=(IMG_SIZE, IMG_SIZE),
+    batch_size=BATCH_SIZE,
+    class_mode='categorical',
+    color_mode='grayscale',
+    subset='validation',
+    shuffle=False
+)
+
+# Get class labels
+class_labels = list(train_generator.class_indices.keys())
+print(f"\nClass labels: {class_labels}")
+```
