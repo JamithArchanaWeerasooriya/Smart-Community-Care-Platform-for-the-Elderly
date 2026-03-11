@@ -1,8 +1,3 @@
-/**
- * emotionApi.js
- * Helpers to persist emotion readings & sessions to the caregiver backend (MongoDB).
- * Import these in EmotionDashboard.jsx to enable persistence.
- */
 
 // Points to your existing backend at /api/caregiver/...
 const CAREGIVER_API = (import.meta.env.VITE_CAREGIVER_API || 'http://localhost:3001/api') + '/caregiver';
