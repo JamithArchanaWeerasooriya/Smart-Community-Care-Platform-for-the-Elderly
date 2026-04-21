@@ -1,5 +1,8 @@
 var express = require("express");
 var dotenv = require("dotenv");
+
+dotenv.config();
+
 var cors = require('cors');
 var mongoose = require("mongoose");
 var routes = require("./routes");
