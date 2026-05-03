@@ -404,12 +404,168 @@ These commands are optional during normal project usage (the batch files already
 
 
 
+# 🌙 AI-Powered Sleep Monitoring
+
+## 📌 Description
+
+This project presents an AI-powered sleep monitoring system that analyzes sleep quality using only a standard device microphone, without requiring any specialized hardware.
+
+The system captures overnight audio and detects snoring events in real time using a custom-trained Deep Neural Network model, achieving an accuracy of 94.72% on the DreamCatcher dataset.
+
+It provides users with personalized sleep insights through:
+- 📊 Interactive dashboards
+- 📈 Weekly sleep trend reports
+- 🧬 Lifestyle factor analysis
+- 🤖 Bilingual AI chat assistant for guidance
+
+This solution offers a low-cost, accessible approach to improving sleep health using artificial intelligence.
+
+
+## 🧠 System Overview
+
+The Sleep Monitoring System is a browser-based, AI-powered solution designed to assess sleep quality by detecting snoring in real time using a standard device microphone. The system operates without requiring any specialized hardware, making it accessible and cost-effective.
+
+It captures audio continuously during sleep, processes it in small chunks, and analyzes it using a Deep Neural Network (DNN) model to classify snoring events.
+
+### 🔄 System Workflow
+
+[ Browser Microphone ]
+        ↓
+[ Web Audio API ]
+        ↓
+[ 4-Second WAV Audio Chunks ]
+        ↓
+[ Node.js Backend ]
+        ↓
+[ Flask ML API ] ───────▶ [ DNN Model → Snore / Non-Snore ]
+        ↓
+[ MongoDB Database ]
+        ↓
+[ React Dashboard ]
+        ↓
+[ Reports + AI Chat Assistant ]
+
+### 📊 Dataset
+
+The model is trained using the **DreamCatcher dataset (NeurIPS 2024)**, a large-scale sleep audio dataset designed for sleep-related sound analysis.
+
+It contains approximately **420 hours of audio recordings** collected from **24 participants (12 pairs)** in real-world sleeping environments. The dataset includes **8 different sound classes**, such as snoring, breathing, coughing, sleep talking (somniloquy), teeth grinding (bruxism), swallowing, movement, and background noise.
+
+For this system, the dataset is simplified into a **binary classification task**, where:
+- **Snore = 1**
+- **All other sounds = 0**
+
+The dataset is publicly available under the **CC BY 4.0 license**, allowing reuse with proper attribution.
+
+### 🧠 Model Architecture
+
+The snore detection model is a Deep Neural Network (DNN) designed for binary classification using audio features.
+
+### 🔄 Architecture Flow
+
+Input (40 MFCC Features)
+        ↓
+Dense Layer (256 neurons, ReLU)
+        ↓
+Dropout (0.3)
+        ↓
+Dense Layer (128 neurons, ReLU)
+        ↓
+Dropout (0.3)
+        ↓
+Dense Layer (64 neurons, ReLU)
+        ↓
+Output Layer (1 neuron, Sigmoid)
+        ↓
+Probability Output (0.0 – 1.0)
+
+
+---
+### 🔊 Audio Preprocessing Pipeline
+
+The raw audio data is processed through a structured pipeline before being fed into the Deep Neural Network (DNN) model.
+
+#### 🔄 Processing Steps
+
+1. **Audio Loading**  
+   - Audio is loaded using `librosa`  
+   - Resampled to **16 kHz** and converted to **mono**
+
+2. **Format Conversion**  
+   - Input audio (WebM) is converted to **WAV format** using FFmpeg
+
+3. **Noise Reduction**  
+   - Background noise is reduced using the `noisereduce` library
+
+4. **Normalization**  
+   - Peak amplitude normalization is applied to ensure consistent signal levels
+
+5. **Silence Trimming**  
+   - Silent sections are removed using a threshold (`top_db = 20`)
+
+6. **Padding / Cropping**  
+   - Audio is adjusted to a fixed length of **5 seconds (80,000 samples)**
+
+7. **Feature Extraction**  
+   - **40 MFCC (Mel-Frequency Cepstral Coefficients)** are extracted  
+   - Mean pooling is applied to obtain a fixed-size feature vector
+
+#### 📤 Output
+
+- Final feature vector shape: **(40,)**
+---
+
+## 🚀 How to Run
+
+Follow these steps to run the system locally:
+
+---
+## 🌐 API Endpoints
+
+### 🛌 Sleep Routes (`/api/sleep/`)
+
+| Method | Endpoint        | Description |
+|--------|---------------|-------------|
+| POST   | `/start`      | Initialize a new sleep session |
+| POST   | `/segment`    | Upload and classify 4-second audio chunk |
+| POST   | `/end`        | Finalize session and compute metrics |
+| POST   | `/factors`    | Save user lifestyle factors |
+| POST   | `/chat`       | AI assistant interaction (GPT-based) |
+| GET    | `/timeline/:id` | Retrieve snore timeline for a session |
+| GET    | `/history`    | Get last 10 sleep sessions |
+| GET    | `/tips`       | Get personalized sleep health tips |
+
+---
+
+### 📊 Report Routes (`/api/report/`)
+
+| Method | Endpoint        | Description |
+|--------|---------------|-------------|
+| GET    | `/weekly/:id` | Get weekly sleep report |
+
+### 1️⃣ Start the ML Service (Flask)
+
+```bash
+cd ml-service
+pip install -r requirements.txt
+python app.py
+
+### 2️⃣ Start the Backend (Node.js)
+cd backend
+npm install
+OPENAI_API_KEY=your_api_key_here
+node index.js
+
+### 3️⃣ Start the Frontend (React)
+cd frontend
+npm install
+npm run dev
 
 
 
 
 
-
+---
 
 License
 MIT License
