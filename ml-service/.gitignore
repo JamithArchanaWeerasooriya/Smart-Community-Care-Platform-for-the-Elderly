@@ -1,0 +1,8 @@
+venv/
+__pycache__/
+*.pyc
+temp.wav
+uploads/
+dataset/
+X.npy
+y.npy

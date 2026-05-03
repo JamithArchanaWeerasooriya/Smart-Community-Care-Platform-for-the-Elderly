@@ -1,0 +1,9 @@
+librosa
+numpy
+scikit-learn
+tensorflow
+tqdm
+flask
+flask-cors
+soundfile
+noisereduce
