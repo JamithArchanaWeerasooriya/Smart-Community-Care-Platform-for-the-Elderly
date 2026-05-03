@@ -1,4 +1,4 @@
-export const generateWeeklyReport = (sessions) => {
+const generateWeeklyReport = (sessions) => {
   if (!sessions.length) {
     return {
       averageScore: 0,
@@ -96,7 +96,7 @@ export const generateWeeklyReport = (sessions) => {
     summary      // 🔥 MUST
   };
 };
-export const generateMonthlyReport = (sessions) => {
+const generateMonthlyReport = (sessions) => {
   if (!sessions.length) return null;
 
   const avg =
@@ -122,7 +122,7 @@ export const generateMonthlyReport = (sessions) => {
     weeklyBreakdown,
   };
 };
-export const generateInsights = (report) => {
+const generateInsights = (report) => {
   const insights = [];
 
   if (report.snoringTrend > 10) {
@@ -138,4 +138,10 @@ export const generateInsights = (report) => {
   });
 
   return insights;
+};
+
+module.exports = {
+  generateWeeklyReport,
+  generateMonthlyReport,
+  generateInsights
 };

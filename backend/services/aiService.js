@@ -1,16 +1,16 @@
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
 dotenv.config();
 
-import axios from "axios";
-import FormData from "form-data";
-import fs from "fs";
-import OpenAI from "openai";
+const axios = require("axios");
+const FormData = require("form-data");
+const fs = require("fs");
+const OpenAI = require("openai");
 
 
 // ==============================
 // 🎧 AUDIO ANALYSIS FUNCTION
 // ==============================
-export const analyzeAudio = async (filePath) => {
+const analyzeAudio = async (filePath) => {
   try {
     const formData = new FormData();
     formData.append("audio", fs.createReadStream(filePath));
@@ -33,7 +33,7 @@ export const analyzeAudio = async (filePath) => {
 // ==============================
 // 💬 AI CHAT FUNCTION
 // ==============================
-export const getAIResponse = async (message, sleepData, lang = "en") => {
+const getAIResponse = async (message, sleepData, lang = "en") => {
   try {
     if (!process.env.OPENAI_API_KEY) {
       throw new Error("OpenAI API key missing");
@@ -103,3 +103,8 @@ ${sleepContext}`;
 function isSinhala(lang) {
   return lang === "si";
 }
+
+module.exports = {
+  analyzeAudio,
+  getAIResponse
+};

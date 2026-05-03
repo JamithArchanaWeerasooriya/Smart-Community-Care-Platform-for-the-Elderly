@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const sleepSessionSchema = new mongoose.Schema({
   userId: {
@@ -61,4 +61,4 @@ const sleepSessionSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-export default mongoose.model("SleepSession", sleepSessionSchema);
+module.exports = mongoose.model("SleepSession", sleepSessionSchema);
