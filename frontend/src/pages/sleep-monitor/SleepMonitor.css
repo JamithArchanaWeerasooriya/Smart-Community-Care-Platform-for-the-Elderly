@@ -1,0 +1,374 @@
+/* SleepMonitor.css - Modern UI for Sleep Monitoring */
+
+/* ===== GLOBAL EXTENSIONS ===== */
+.my-reminders-app {
+  --monitor-glow: rgba(23, 107, 135, 0.3);
+}
+
+/* ===== TIME DISPLAY ===== */
+.monitor-time {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: 4px;
+  background: linear-gradient(135deg, #176b87, #3f9eb8);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 10px rgba(23, 107, 135, 0.2);
+  margin-bottom: 8px;
+}
+
+/* ===== MAIN BUTTON ===== */
+.monitor-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 18px 42px;
+  border: none;
+  border-radius: 60px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #176b87, #3f9eb8);
+  color: white;
+  box-shadow: 0 20px 35px -12px rgba(23, 107, 135, 0.5);
+  transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(4px);
+}
+
+.monitor-button:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 28px 40px -16px rgba(23, 107, 135, 0.6);
+}
+
+.monitor-button:active {
+  transform: translateY(2px) scale(0.98);
+}
+
+.monitor-button.active {
+  background: linear-gradient(135deg, #df5a6a, #ff7b8b);
+  box-shadow: 0 20px 35px -12px rgba(223, 90, 106, 0.5);
+}
+
+.monitor-button .material-icons {
+  font-size: 1.6rem;
+}
+
+/* ===== INFO CARDS (Time to Sleep + Factors) ===== */
+.monitor-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 32px;
+}
+
+.sleep-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 24px;
+  border-radius: 28px;
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 20px 35px -15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.sleep-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(23, 107, 135, 0.3);
+  box-shadow: 0 28px 40px -18px rgba(23, 107, 135, 0.25);
+}
+
+.sleep-icon {
+  font-size: 2.8rem;
+  background: linear-gradient(135deg, #176b87, #3f9eb8);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sleep-card h3 {
+  margin: 0 0 6px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.sleep-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Responsive grid – supports 1, 2, or 3 cards */
+.monitor-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 32px;
+}
+
+/* Optional: make the timer value stand out */
+.timer-card .timer-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  font-family: monospace;
+  letter-spacing: 1px;
+  color: #176b87;
+}
+
+/* ===== POPUP OVERLAY (shared for delay & factors) ===== */
+.delay-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; backdrop-filter: blur(0); }
+  to { opacity: 1; backdrop-filter: blur(8px); }
+}
+
+.delay-popup {
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  border-radius: 36px;
+  padding: 20px 18px;
+  width: 360px;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  animation: slideUp 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.delay-popup h2 {
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #176b87, #3f9eb8);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.delay-popup p {
+  margin: 0 0 20px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* radio / checkbox options */
+.delay-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  margin: 4px 0;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.delay-option:hover {
+  background: rgba(23, 107, 135, 0.05);
+  border-color: rgba(23, 107, 135, 0.3);
+}
+
+.delay-option span:first-child {
+  font-weight: 600;
+  color: #ffffff; /* 👈 make text white */
+}
+
+.delay-option input {
+  width: 20px;
+  height: 20px;
+  accent-color: #176b87;
+  cursor: pointer;
+}
+
+/* custom input row */
+.custom-input {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0 20px;
+}
+
+.custom-input input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: white;
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.custom-input input:focus {
+  border-color: #176b87;
+  box-shadow: 0 0 0 3px rgba(23, 107, 135, 0.1);
+}
+
+.custom-input button {
+  background: linear-gradient(135deg, #176b87, #3f9eb8);
+  border: none;
+  padding: 0 20px;
+  border-radius: 30px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.custom-input button:hover {
+  transform: scale(1.02);
+}
+
+/* popup main action button */
+.delay-popup > button:last-of-type {
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px;
+  background: linear-gradient(135deg, #176b87, #3f9eb8);
+  border: none;
+  border-radius: 40px;
+  color: white;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delay-popup > button:last-of-type:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -8px rgba(23, 107, 135, 0.5);
+}
+
+/* floating + button (for factors) - but better to remove from JSX, here's style */
+.floating-add-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #176b87, #3f9eb8);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s;
+  z-index: 1001;
+}
+
+.floating-add-btn:hover {
+  transform: scale(1.08) rotate(90deg);
+  background: linear-gradient(135deg, #14566d, #2d7f99);
+}
+/* ❌ CLOSE BUTTON */
+.popup-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #64748b;
+
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* hover effect */
+.popup-close:hover {
+  color: #ef4444;
+  transform: scale(1.2);
+}
+
+/* make popup relative for positioning */
+.delay-popup {
+  position: relative; /* 🔥 IMPORTANT */
+}
+/* ===== RESPONSIVE ===== */
+@media (max-width: 720px) {
+  .monitor-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .monitor-button {
+    padding: 14px 32px;
+    font-size: 1.1rem;
+  }
+
+  .monitor-time {
+    font-size: 2.4rem;
+  }
+
+  .delay-popup {
+    width: 88vw;
+    padding: 20px;
+  }
+
+  .sleep-card {
+    padding: 16px 20px;
+  }
+}
+
+/* ===== DARK MODE READY (optional, respects dashboard variables) ===== */
+@media (prefers-color-scheme: dark) {
+  .delay-popup {
+    background: linear-gradient(145deg, #1e293b, #0f172a);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .delay-option {
+    background: rgba(30, 41, 59, 0.6);
+  }
+
+  .delay-option span:first-child {
+    color: #e2e8f0;
+  }
+
+  .custom-input input {
+    background: #1e293b;
+    color: white;
+    border-color: #334155;
+  }
+}

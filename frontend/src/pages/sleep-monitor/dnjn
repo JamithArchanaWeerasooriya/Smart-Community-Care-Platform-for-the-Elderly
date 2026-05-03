@@ -1,0 +1,277 @@
+import "./AISleepAssistant.css";
+import "material-icons/iconfont/material-icons.css";
+import { Link } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import API from "../../services/api";
+
+function AISleepAssistant() {
+  const [message, setMessage] = useState("");
+  const [chat, setChat] = useState([
+    {
+      sender: "bot",
+      text: "Hello! I'm your AI sleep assistant 🌙\nAsk me anything about sleep.",
+    },
+  ]);
+  const [loading, setLoading] = useState(false);
+  const chatBoxRef = useRef(null);
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [chat, loading]);
+
+  const sendMessage = async () => {
+    if (!message.trim()) return;
+
+    const userMessage = message.trim();
+
+    setChat((prev) => [...prev, { sender: "user", text: userMessage }]);
+    setMessage("");
+    setLoading(true);
+
+    try {
+      const res = await API.post("/ai-sleep/chat", {
+        message: userMessage,
+      });
+
+      setChat((prev) => [
+        ...prev,
+        { sender: "bot", text: res.data.reply },
+      ]);
+    } catch (error) {
+      console.error("AI chat error:", error);
+      setChat((prev) => [
+        ...prev,
+        {
+          sender: "bot",
+          text: "Sorry, I'm having trouble connecting right now 😢\nPlease try again in a moment.",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
+  return (
+    <div className="my-reminders-app">
+      <div className="app-content">
+        {/* HEADER SECTION */}
+        <header className="app-header">
+          <div className="header-hero">
+            <div className="header-copy">
+              <div className="header-text">
+                <p className="greeting-date">
+                  {new Date().toLocaleDateString("en-US", {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                  }).toUpperCase()}
+                </p>
+                <h1 className="greeting-title">
+                  AI sleep assistant 
+                </h1>
+                
+              </div>
+              <div className="header-actions">
+                <Link to="/monitor">
+                  <button className="btn-primary">
+                    <span className="material-icons">play_arrow</span>
+                    Start Monitoring
+                  </button>
+                </Link>
+                <Link to="/sleep-monitor">
+                  <button className="btn-secondary">
+                    <span className="material-icons">dashboard</span>
+                    Back to Dashboard
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* CHAT MAIN SECTION */}
+        <main className="main-board">
+          <section className="board-shell">
+            <div className="board-header-row">
+              <div>
+                <p className="board-eyebrow">
+                  <span className="material-icons" style={{ fontSize: "1rem", verticalAlign: "middle" }}>
+                    chat
+                  </span>{" "}
+                  Live Assistant
+                </p>
+                <h2 className="board-title">AI Sleep Conversation</h2>
+                <p className="board-subtitle">
+                  Ask me anything about sleep.
+                </p>
+              </div>
+              <div className="board-count-chip">
+                <span className="material-icons">history</span>
+                {chat.filter(c => c.sender === "bot").length} responses
+              </div>
+            </div>
+
+            {/* CHAT MESSAGES CONTAINER */}
+            <div
+  ref={chatBoxRef}
+  style={{
+    background: "rgba(246, 247, 242, 0.5)",
+    borderRadius: "24px",
+    padding: "20px",
+    marginBottom: "20px",
+    maxHeight: "460px",
+    overflowY: "auto",
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+  }}
+>
+              {chat.map((msg, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    display: "flex",
+                    justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
+                  }}
+                >
+                  <div
+                    className={msg.sender === "user" ? "reminder-card type-custom" : "reminder-card type-medicine"}
+                    style={{
+                      maxWidth: "80%",
+                      minWidth: "180px",
+                      margin: 0,
+                      padding: "16px 20px",
+                      background: msg.sender === "user"
+                        ? "linear-gradient(135deg, #176b87 0%, #3f9eb8 100%)"
+                        : "linear-gradient(180deg, #ffffff, #f9fbfc)",
+                      border: msg.sender === "user" ? "none" : "1px solid rgba(23, 107, 135, 0.15)",
+                      boxShadow: "0 8px 20px rgba(0,0,0,0.05)",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
+                      <span className="material-icons" style={{ fontSize: "1.2rem" }}>
+                        {msg.sender === "user" ? "person" : "smart_toy"}
+                      </span>
+                      <span style={{ fontWeight: 800, fontSize: "0.75rem", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                        {msg.sender === "user" ? "You" : "AI Assistant"}
+                      </span>
+                    </div>
+                    <p style={{ margin: 0, lineHeight: 1.5, whiteSpace: "pre-wrap", color: msg.sender === "user" ? "#fff" : "var(--text-primary)" }}>
+                      {msg.text}
+                    </p>
+                  </div>
+                </div>
+              ))}
+              {loading && (
+                <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                  <div
+                    className="reminder-card type-medicine"
+                    style={{
+                      maxWidth: "80%",
+                      padding: "16px 20px",
+                      background: "#ffffff",
+                      border: "1px solid rgba(23, 107, 135, 0.15)",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <span className="material-icons" style={{ fontSize: "1.2rem" }}>smart_toy</span>
+                      <span style={{ fontWeight: 800, fontSize: "0.75rem" }}>AI Assistant</span>
+                      <span style={{ marginLeft: "8px", display: "flex", gap: "4px" }}>
+                        <span className="typing-dot">.</span><span className="typing-dot">.</span><span className="typing-dot">.</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {!loading && chat.length === 0 && (
+                <div className="empty-state-glass" style={{ margin: "20px 0" }}>
+                  <div className="empty-icon-wrap">
+                    <span className="material-icons">chat_bubble_outline</span>
+                  </div>
+                  <h3>Start a conversation</h3>
+                  <p>Ask about your sleep patterns, snoring levels, or wellness tips.</p>
+                </div>
+              )}
+            </div>
+
+            {/* CHAT INPUT AREA */}
+            <div style={{ display: "flex", gap: "12px", alignItems: "flex-end" }}>
+              <div style={{ flex: 1, position: "relative" }}>
+                <textarea
+                  className="chat-input"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Type your sleep question here..."
+                  rows="2"
+                  style={{
+                    width: "100%",
+                    padding: "14px 16px",
+                    borderRadius: "20px",
+                    border: "1px solid rgba(148, 163, 184, 0.28)",
+                    background: "#ffffff",
+                    fontFamily: "inherit",
+                    fontSize: "0.95rem",
+                    resize: "none",
+                    outline: "none",
+                    transition: "all 0.2s",
+                  }}
+                  onFocus={(e) => (e.target.style.borderColor = "#176b87")}
+                  onBlur={(e) => (e.target.style.borderColor = "rgba(148, 163, 184, 0.28)")}
+                />
+              </div>
+              <button
+                className="btn-primary"
+                onClick={sendMessage}
+                disabled={loading || !message.trim()}
+                style={{
+                  minHeight: "52px",
+                  padding: "0 24px",
+                  opacity: loading || !message.trim() ? 0.6 : 1,
+                  cursor: loading || !message.trim() ? "not-allowed" : "pointer",
+                }}
+              >
+                <span className="material-icons">send</span>
+                Send
+              </button>
+            </div>
+            <p style={{ fontSize: "0.75rem", color: "var(--text-soft)", marginTop: "16px", textAlign: "center" }}>
+              <span className="material-icons" style={{ fontSize: "0.9rem", verticalAlign: "middle" }}>info</span>
+              Your sleep data is private — conversations help improve your insights.
+            </p>
+          </section>
+        </main>
+      </div>
+
+      {/* Animated typing dots */}
+      <style jsx>{`
+        .typing-dot {
+          animation: blink 1.4s infinite;
+          font-size: 1.5rem;
+          line-height: 1;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink {
+          0%, 60%, 100% { opacity: 0.3; }
+          30% { opacity: 1; }
+        }
+        .chat-input:focus {
+          box-shadow: 0 0 0 3px rgba(23, 107, 135, 0.12);
+        }
+      `}</style>
+    </div>
+  );
+}
+
+export default AISleepAssistant;
