@@ -85,7 +85,7 @@ export default function VoiceButton({ init, onIntent = null }) {
     setStatusText("Processing...");
 
     try {
-      const response = await fetch('http://localhost:5000/parse', {
+      const response = await fetch('https://rasa-nlu-979103849173.europe-west1.run.app/parse', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text })

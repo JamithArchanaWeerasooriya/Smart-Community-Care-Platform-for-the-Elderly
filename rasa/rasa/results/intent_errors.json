@@ -1,0 +1,10 @@
+[
+  {
+    "text": "එපා",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "stop_all",
+      "confidence": 0.5862655639648438
+    }
+  }
+]

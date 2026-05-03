@@ -1,0 +1,902 @@
+[
+  {
+    "text": "පොඩ්ඩක්පහලට යන්න.",
+    "entities": [
+      {
+        "start": 7,
+        "end": 11,
+        "value": "පහලට",
+        "entity": "direction"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "ටිකක්පහලට යන්න.",
+    "entities": [
+      {
+        "start": 5,
+        "end": 9,
+        "value": "පහලට",
+        "entity": "direction"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "මගේ හිතට කොහොමද කියලා බලන තැනට යන්නකෝ.",
+    "entities": [
+      {
+        "start": 4,
+        "end": 7,
+        "value": "හිත",
+        "entity": "page"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "මට අද උදේ 9ට බෙහෙත් බොන්න මතක් කරන්න.",
+    "entities": [
+      {
+        "start": 3,
+        "end": 5,
+        "value": "අද",
+        "entity": "date"
+      },
+      {
+        "start": 6,
+        "end": 9,
+        "value": "උදේ",
+        "entity": "time_period"
+      },
+      {
+        "start": 10,
+        "end": 11,
+        "value": "9",
+        "entity": "time"
+      },
+      {
+        "start": 13,
+        "end": 25,
+        "value": "බෙහෙත් බොන්න",
+        "entity": "task"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "date",
+        "start": 3,
+        "end": 5,
+        "confidence_entity": 0.9993124008178711,
+        "value": "today",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "time_period",
+        "start": 6,
+        "end": 9,
+        "confidence_entity": 0.9993859529495239,
+        "value": "උදේ",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 13,
+        "end": 25,
+        "confidence_entity": 0.9989132881164551,
+        "value": "බෙහෙත් බොන්න",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "මට අද දවල් 2ට වතුර බිල ගෙවන්න මතක් කරන්න.",
+    "entities": [
+      {
+        "start": 3,
+        "end": 5,
+        "value": "අද",
+        "entity": "date"
+      },
+      {
+        "start": 6,
+        "end": 10,
+        "value": "දවල්",
+        "entity": "time_period"
+      },
+      {
+        "start": 11,
+        "end": 12,
+        "value": "2",
+        "entity": "time"
+      },
+      {
+        "start": 14,
+        "end": 29,
+        "value": "වතුර බිල ගෙවන්න",
+        "entity": "task"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "date",
+        "start": 3,
+        "end": 5,
+        "confidence_entity": 0.9996533393859863,
+        "value": "today",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "time_period",
+        "start": 6,
+        "end": 10,
+        "confidence_entity": 0.9999005794525146,
+        "value": "දවල්",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 14,
+        "end": 29,
+        "confidence_entity": 0.997943103313446,
+        "value": "වතුර බිල ගෙවන්න",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "මට අද ‍රෑ 8ට ලයිට් බිල ගෙවන්න මතක් කරන්න.",
+    "entities": [
+      {
+        "start": 3,
+        "end": 5,
+        "value": "අද",
+        "entity": "date"
+      },
+      {
+        "start": 6,
+        "end": 9,
+        "value": "‍රෑ",
+        "entity": "time_period"
+      },
+      {
+        "start": 10,
+        "end": 11,
+        "value": "8",
+        "entity": "time"
+      },
+      {
+        "start": 13,
+        "end": 29,
+        "value": "ලයිට් බිල ගෙවන්න",
+        "entity": "task"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "date",
+        "start": 3,
+        "end": 5,
+        "confidence_entity": 0.9997521042823792,
+        "value": "today",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "time_period",
+        "start": 6,
+        "end": 9,
+        "confidence_entity": 0.9995632767677307,
+        "value": "‍රෑ",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 13,
+        "end": 29,
+        "confidence_entity": 0.9990561604499817,
+        "value": "ලයිට් බිල ගෙවන්න",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "මට හෙට උදේ 9ට බෙහෙත් ගන්න යන්න මතක් කරන්න.",
+    "entities": [
+      {
+        "start": 3,
+        "end": 6,
+        "value": "හෙට",
+        "entity": "date"
+      },
+      {
+        "start": 7,
+        "end": 10,
+        "value": "උදේ",
+        "entity": "time_period"
+      },
+      {
+        "start": 11,
+        "end": 12,
+        "value": "9",
+        "entity": "time"
+      },
+      {
+        "start": 14,
+        "end": 30,
+        "value": "බෙහෙත් ගන්න යන්න",
+        "entity": "task"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "date",
+        "start": 3,
+        "end": 6,
+        "confidence_entity": 0.9992874264717102,
+        "value": "හෙට",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "time_period",
+        "start": 7,
+        "end": 10,
+        "confidence_entity": 0.9990341663360596,
+        "value": "උදේ",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 14,
+        "end": 30,
+        "confidence_entity": 0.9944376945495605,
+        "value": "බෙහෙත් ගන්න යන්න",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "මට හෙට දවල් 2ට වතුර බොන්න මතක් කරන්න.",
+    "entities": [
+      {
+        "start": 3,
+        "end": 6,
+        "value": "හෙට",
+        "entity": "date"
+      },
+      {
+        "start": 7,
+        "end": 11,
+        "value": "දවල්",
+        "entity": "time_period"
+      },
+      {
+        "start": 12,
+        "end": 13,
+        "value": "2",
+        "entity": "time"
+      },
+      {
+        "start": 15,
+        "end": 25,
+        "value": "වතුර බොන්න",
+        "entity": "task"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "date",
+        "start": 3,
+        "end": 6,
+        "confidence_entity": 0.9994879961013794,
+        "value": "හෙට",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "time_period",
+        "start": 7,
+        "end": 11,
+        "confidence_entity": 0.9999010562896729,
+        "value": "දවල්",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 15,
+        "end": 25,
+        "confidence_entity": 0.9996687173843384,
+        "value": "වතුර බොන්න",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "මට හෙට ‍රෑ 7ට ආහාර ගන්න මතක් කරන්න.",
+    "entities": [
+      {
+        "start": 3,
+        "end": 6,
+        "value": "හෙට",
+        "entity": "date"
+      },
+      {
+        "start": 7,
+        "end": 10,
+        "value": "‍රෑ",
+        "entity": "time_period"
+      },
+      {
+        "start": 11,
+        "end": 12,
+        "value": "7",
+        "entity": "time"
+      },
+      {
+        "start": 14,
+        "end": 23,
+        "value": "ආහාර ගන්න",
+        "entity": "task"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "date",
+        "start": 3,
+        "end": 6,
+        "confidence_entity": 0.9997408986091614,
+        "value": "හෙට",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "time_period",
+        "start": 7,
+        "end": 10,
+        "confidence_entity": 0.999599277973175,
+        "value": "‍රෑ",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 14,
+        "end": 23,
+        "confidence_entity": 0.9985887408256531,
+        "value": "ආහාර ගන්න",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "මට අනිද්දා උදේ 12ට කෑම කන්න මතක් කරන්න.",
+    "entities": [
+      {
+        "start": 3,
+        "end": 10,
+        "value": "අනිද්දා",
+        "entity": "date"
+      },
+      {
+        "start": 11,
+        "end": 14,
+        "value": "උදේ",
+        "entity": "time_period"
+      },
+      {
+        "start": 15,
+        "end": 17,
+        "value": "12",
+        "entity": "time"
+      },
+      {
+        "start": 19,
+        "end": 27,
+        "value": "කෑම කන්න",
+        "entity": "task"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "date",
+        "start": 3,
+        "end": 10,
+        "confidence_entity": 0.9994753003120422,
+        "value": "අනිද්දා",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "time_period",
+        "start": 11,
+        "end": 14,
+        "confidence_entity": 0.9994663596153259,
+        "value": "උදේ",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 19,
+        "end": 27,
+        "confidence_entity": 0.998840868473053,
+        "value": "කෑම කන්න",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "මට අනිද්දා දවල් 4ට පුතාට කතා කරන්න මතක් කරන්න.",
+    "entities": [
+      {
+        "start": 3,
+        "end": 10,
+        "value": "අනිද්දා",
+        "entity": "date"
+      },
+      {
+        "start": 11,
+        "end": 15,
+        "value": "දවල්",
+        "entity": "time_period"
+      },
+      {
+        "start": 16,
+        "end": 17,
+        "value": "4",
+        "entity": "time"
+      },
+      {
+        "start": 19,
+        "end": 34,
+        "value": "පුතාට කතා කරන්න",
+        "entity": "task"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "date",
+        "start": 3,
+        "end": 10,
+        "confidence_entity": 0.9993672966957092,
+        "value": "අනිද්දා",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "time_period",
+        "start": 11,
+        "end": 15,
+        "confidence_entity": 0.9997898936271667,
+        "value": "දවල්",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 19,
+        "end": 34,
+        "confidence_entity": 0.9894129633903503,
+        "value": "පුතාට කතා කරන්න",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "මට අනිද්දා ‍රෑ 10ට දුවට කතා කරන්න මතක් කරන්න.",
+    "entities": [
+      {
+        "start": 3,
+        "end": 10,
+        "value": "අනිද්දා",
+        "entity": "date"
+      },
+      {
+        "start": 11,
+        "end": 14,
+        "value": "‍රෑ",
+        "entity": "time_period"
+      },
+      {
+        "start": 15,
+        "end": 17,
+        "value": "10",
+        "entity": "time"
+      },
+      {
+        "start": 19,
+        "end": 33,
+        "value": "දුවට කතා කරන්න",
+        "entity": "task"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "date",
+        "start": 3,
+        "end": 10,
+        "confidence_entity": 0.9995831847190857,
+        "value": "අනිද්දා",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "time_period",
+        "start": 11,
+        "end": 14,
+        "confidence_entity": 0.999161958694458,
+        "value": "‍රෑ",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 19,
+        "end": 33,
+        "confidence_entity": 0.997104823589325,
+        "value": "දුවට කතා කරන්න",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "හෙට උදේ යන ගමන පැයක් පරක්කු කරන්න.",
+    "entities": [
+      {
+        "start": 0,
+        "end": 3,
+        "value": "හෙට",
+        "entity": "date"
+      },
+      {
+        "start": 4,
+        "end": 7,
+        "value": "උදේ",
+        "entity": "time_period"
+      },
+      {
+        "start": 8,
+        "end": 14,
+        "value": "යන ගමන",
+        "entity": "task"
+      },
+      {
+        "start": 15,
+        "end": 20,
+        "value": "පැයක්",
+        "entity": "time"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "date",
+        "start": 0,
+        "end": 3,
+        "confidence_entity": 0.999455988407135,
+        "value": "හෙට",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "time",
+        "start": 4,
+        "end": 7,
+        "confidence_entity": 0.645334005355835,
+        "value": "උදේ",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 8,
+        "end": 14,
+        "confidence_entity": 0.9992523789405823,
+        "value": "යන ගමන",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "time",
+        "start": 15,
+        "end": 20,
+        "confidence_entity": 0.9996718168258667,
+        "value": "පැයක්",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "අද හවස බෙහෙත් බොන වෙලාව පැය දෙකයි විනාඩි පහලොවක්  පරක්කු කරන්න.",
+    "entities": [
+      {
+        "start": 0,
+        "end": 2,
+        "value": "අද",
+        "entity": "date"
+      },
+      {
+        "start": 3,
+        "end": 6,
+        "value": "හවස",
+        "entity": "time_period"
+      },
+      {
+        "start": 7,
+        "end": 23,
+        "value": "බෙහෙත් බොන වෙලාව",
+        "entity": "task"
+      },
+      {
+        "start": 24,
+        "end": 27,
+        "value": "පැය",
+        "entity": "timestamp"
+      },
+      {
+        "start": 28,
+        "end": 33,
+        "value": "දෙකයි",
+        "entity": "time"
+      },
+      {
+        "start": 34,
+        "end": 40,
+        "value": "විනාඩි",
+        "entity": "timestamp"
+      },
+      {
+        "start": 41,
+        "end": 49,
+        "value": "පහලොවක් ",
+        "entity": "time"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "date",
+        "start": 0,
+        "end": 2,
+        "confidence_entity": 0.9997816681861877,
+        "value": "today",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "time_period",
+        "start": 3,
+        "end": 6,
+        "confidence_entity": 0.9957411289215088,
+        "value": "හවස",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 7,
+        "end": 23,
+        "confidence_entity": 0.998572826385498,
+        "value": "බෙහෙත් බොන වෙලාව",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "timestamp",
+        "start": 24,
+        "end": 27,
+        "confidence_entity": 0.9973284006118774,
+        "value": "hour",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "time",
+        "start": 28,
+        "end": 33,
+        "confidence_entity": 0.98529052734375,
+        "value": "දෙකයි",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "timestamp",
+        "start": 34,
+        "end": 40,
+        "confidence_entity": 0.9993389248847961,
+        "value": "minute",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "අද දුවට කතා කරන්න තියෙන රිමයින්ඩර් එක අයින් කරන්න පුළුවන්ද?",
+    "entities": [
+      {
+        "start": 0,
+        "end": 2,
+        "value": "අද",
+        "entity": "date"
+      },
+      {
+        "start": 3,
+        "end": 17,
+        "value": "දුවට කතා කරන්න",
+        "entity": "task"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "date",
+        "start": 0,
+        "end": 2,
+        "confidence_entity": 0.9997814297676086,
+        "value": "today",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 3,
+        "end": 17,
+        "confidence_entity": 0.9986978769302368,
+        "value": "දුවට කතා කරන්න",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 44,
+        "end": 49,
+        "confidence_entity": 0.5171773433685303,
+        "value": "කරන්න",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "අද දුවට කතා කරන්න තියෙන මතක් කිරීම අයින් කරන්න පුළුවන්ද?",
+    "entities": [
+      {
+        "start": 0,
+        "end": 2,
+        "value": "අද",
+        "entity": "date"
+      },
+      {
+        "start": 3,
+        "end": 17,
+        "value": "දුවට කතා කරන්න",
+        "entity": "task"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "date",
+        "start": 0,
+        "end": 2,
+        "confidence_entity": 0.999622106552124,
+        "value": "today",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 3,
+        "end": 17,
+        "confidence_entity": 0.9983769655227661,
+        "value": "දුවට කතා කරන්න",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "task",
+        "start": 41,
+        "end": 46,
+        "confidence_entity": 0.6042900085449219,
+        "value": "කරන්න",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  }
+]
