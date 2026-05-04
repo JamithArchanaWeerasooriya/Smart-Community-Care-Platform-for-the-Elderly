@@ -16,7 +16,7 @@ const analyzeAudio = async (filePath) => {
     formData.append("audio", fs.createReadStream(filePath));
 
     const response = await axios.post(
-      "http://localhost:5001/api/sleep/predict",
+      "https://archanaweerasooriya-chamodya.hf.space/api/sleep/predict",
       formData,
       { headers: formData.getHeaders() }
     );
