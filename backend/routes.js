@@ -5,6 +5,8 @@ const voiceRoutes = require("./routes/voiceRoutes");
 const caregiverRoutes = require("./routes/caregiverRoutes");
 const sleepRoutes = require("./routes/sleepRoutes");
 const reportRoutes = require("./routes/reportRoutes");
+const adminRoute = require("./routes/adminRoute");
+const caretakerRoute = require("./routes/caretakerRoute");
 
 //Register your all routes here
 router.use("/reminder",reminderRoutes);
@@ -14,5 +16,7 @@ router.use("/sleep", sleepRoutes);
 router.use("/uploads", express.static("uploads"));
 router.use("/ai-sleep", sleepRoutes);
 router.use("/report", reportRoutes);
+router.use("/admin", adminRoute);
+router.use("/caretaker", caretakerRoute);
 
 module.exports = router;
