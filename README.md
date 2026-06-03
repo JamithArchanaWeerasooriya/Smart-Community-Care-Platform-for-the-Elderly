@@ -402,7 +402,190 @@ These commands are optional during normal project usage (the batch files already
 
 ---
 
+# 🚨 IoT Fall Detection System for Elderly Care
 
+Real-time fall detection using ESP32, MPU6050, MQTT, Node.js, and React.
+
+---
+
+## 🚀 Features
+
+- Real-time fall detection with 4-stage algorithm
+- Instant caregiver alerts (visual + audio)
+- MQTT with TLS/SSL encryption
+- MongoDB cloud storage
+- React dashboard with charts & fall history
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Hardware | ESP32, MPU6050 |
+| Firmware | Arduino C++ |
+| Communication | MQTT (HiveMQ Cloud, port 8883) |
+| Backend | Node.js, Express.js |
+| Database | MongoDB Atlas |
+| Frontend | React, Chart.js |
+
+---
+
+## 📁 Project Structure
+iot-fall-detection/
+├── esp32-firmware/
+│ └── fall_detection.ino # ESP32 Arduino code
+├── backend/
+│ ├── server.js # Node.js backend
+│ ├── package.json
+│ ├── .env # Environment variables
+│ └── models/
+│ └── SensorData.js # MongoDB schema
+├── frontend/
+│ ├── src/
+│ │ ├── App.jsx # Main React component
+│ │ ├── components/
+│ │ │ ├── Layout.jsx
+│ │ │ └── CaretakerDashboard.jsx
+│ │ └── services/
+│ │ └── api.js
+│ ├── package.json
+│ └── index.html
+├── public/
+│ └── alarm.wav # Alert sound file
+└── README.md
+
+
+---
+
+## ⚙️ Hardware Wiring
+
+| MPU6050 | ESP32 |
+|---------|-------|
+| VCC | 3.3V |
+| GND | GND |
+| SCL | GPIO 22 |
+| SDA | GPIO 21 |
+
+**Total Cost:** ~LKR 8,000
+
+---
+
+## 🔧 Installation
+
+### 1. Arduino IDE Setup
+
+```bash
+# Add ESP32 board URL in Preferences
+https://dl.espressif.com/dl/package_esp32_index.json
+
+# Install libraries
+PubSubClient by Nick O'Leary
+MPU6050 by Electronic Cats
+
+2. Backend Setup
+cd backend
+npm install
+npm start
+
+.env file:
+PORT=5000
+MONGO_URI=your_mongodb_uri
+MQTT_URL=mqtts://your-broker:8883
+MQTT_USER=elder
+MQTT_PASS=Elder@123
+
+3. Frontend Setup
+cd frontend
+npm install
+npm run dev
+
+4. ESP32 Upload
+Open fall_detection.ino in Arduino IDE
+
+Update WiFi credentials
+
+Select board: ESP32 Dev Module
+
+Select port (e.g., COM5)
+
+Click Verify → Upload
+
+▶️ Running
+# Terminal 1 - Backend
+cd backend && npm start
+
+# Terminal 2 - Frontend  
+cd frontend && npm run dev
+
+# Terminal 3 - ESP32 Serial Monitor (115200 baud)
+Open browser: http://localhost:5173
+
+🔍 How It Works
+4-Stage Fall Detection
+Stage	Condition	Threshold
+1	Sudden Movement	ΔA > 7000
+2	Strong Rotation	gyroMag > 2000
+3	Hard Impact	A > 19000
+4	Post-Fall Stillness	15000 < A < 17500 (1500ms)
+
+Data Flow
+MPU6050 → ESP32 → HiveMQ Cloud → Backend → MongoDB → React Dashboard
+
+JSON Payload
+{
+  "deviceId": "94e6f86d8a38",
+  "ax": 4250, "ay": -15892, "az": -320,
+  "gx": 125, "gy": -320, "gz": 98,
+  "A": 16450, "fall": true
+}
+
+📊 API Endpoints
+Method	Endpoint	Description
+GET	/	Health check
+GET	/data	Latest 50 records
+GET	/falls	Only fall events
+GET	/caretaker/fall/:deviceId	Latest fall status
+🎮 Controls
+Key/Button	Action
+EN (Reset)	Restart ESP32
+BOOT	Enter upload mode
+Acknowledge	Stop alarm on dashboard
+🔧 Troubleshooting
+Issue	Solution
+COM port not found	Install CP210x/CH340 driver, use data cable
+Upload timeout	Reduce speed to 115200, use manual BOOT button
+MQTT fails	Check credentials, port 8883
+WiFi not connecting	Use 2.4GHz network
+📈 Performance
+Metric	Value
+Sampling rate	10 Hz
+Response time	< 200 ms
+Hardware cost	LKR 8,000
+🧯 Future Improvements
+ESP32 deep sleep mode for battery operation
+
+Mobile app with push notifications
+
+Support multiple devices
+
+Machine learning model for accuracy
+
+📜 License
+MIT License - Educational and research purposes only.
+
+Acknowledgements
+Arduino Core for ESP32 - Espressif Systems
+
+PubSubClient - Nick O'Leary
+
+MPU6050 Library - Electronic Cats
+
+HiveMQ Cloud - Free MQTT broker
+
+MongoDB Atlas - Free cloud database
+
+---
 
 # 🌙 AI-Powered Sleep Monitoring
 
